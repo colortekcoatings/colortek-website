@@ -2,6 +2,7 @@ import { defineConfig } from 'sanity';
 import { structureTool } from 'sanity/structure';
 import { visionTool } from '@sanity/vision';
 import { schemaTypes } from './sanity/schemas/index.js';
+import EnquiriesTool from './sanity/tools/EnquiriesTool.jsx';
 
 /**
  * The admin panel itself, served at /admin.
@@ -11,7 +12,7 @@ import { schemaTypes } from './sanity/schemas/index.js';
  * repeatable collections, then settings. The one-off pages are pinned as
  * single entries so the client cannot accidentally create a second home page.
  */
-const SINGLETONS = ['siteSettings', 'homePage', 'faqPage'];
+const SINGLETONS = ['siteSettings', 'homePage', 'aboutPage', 'productsPage', 'contactPage', 'faqPage'];
 
 export default defineConfig({
   name: 'colortek',
@@ -34,6 +35,16 @@ export default defineConfig({
               .title('Home page')
               .id('homePage')
               .child(S.document().schemaType('homePage').documentId('homePage')),
+
+            S.listItem()
+              .title('About page')
+              .id('aboutPage')
+              .child(S.document().schemaType('aboutPage').documentId('aboutPage')),
+
+            S.listItem()
+              .title('Products page')
+              .id('productsPage')
+              .child(S.document().schemaType('productsPage').documentId('productsPage')),
 
             S.listItem()
               .title('Product pages')
@@ -59,6 +70,11 @@ export default defineConfig({
               ),
 
             S.listItem()
+              .title('Contact page')
+              .id('contactPage')
+              .child(S.document().schemaType('contactPage').documentId('contactPage')),
+
+            S.listItem()
               .title('FAQ page')
               .id('faqPage')
               .child(S.document().schemaType('faqPage').documentId('faqPage')),
@@ -73,6 +89,17 @@ export default defineConfig({
     }),
     // Query tool — for us, not part of the client's day-to-day.
     visionTool(),
+  ],
+
+  // "Enquiries" sits beside Structure in the top bar. It reads through a
+  // server-side function so the Netlify key never reaches the browser.
+  tools: (prev) => [
+    ...prev,
+    {
+      name: 'enquiries',
+      title: 'Enquiries',
+      component: EnquiriesTool,
+    },
   ],
 
   schema: {

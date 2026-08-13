@@ -1,48 +1,35 @@
 ---
 import Base from '../layouts/Base.astro';
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "AboutPage",
-  "mainEntity": {
-    "@type": "Organization",
-    "name": "Colourtech Coating (India) Pvt. Ltd.",
-    "alternateName": "Colortek",
-    "url": "https://colortek.in/",
-    "foundingDate": "2000",
-    "email": "info@colortek.in",
-    "telephone": "+91-9819362380",
-    "hasCredential": "ISO 9001:2015",
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "B-37, MIDC Phase I, Kalyan Road, Golavali, Shilphata",
-      "addressLocality": "Dombivli (E)",
-      "addressRegion": "Maharashtra",
-      "postalCode": "421203",
-      "addressCountry": "IN"
-    }
-  }
-};
+import { sanityClient } from 'sanity:client';
+import { responsive, altOf } from '../lib/image.js';
+import { toHTML } from '@portabletext/to-html';
+
+const page = await sanityClient.fetch(`*[_id == "aboutPage"][0]{
+  headingLine1, headingLine2, intro, seo, cta,
+  facts[]{ label, value },
+  storyTitle, storyBody, storyQuote, storyImage,
+  vmvHeading, vmvPanels[]{ title, body, colour }, values,
+  timelineHeading, timelineRange, milestones[]{ year, text },
+  secondStoryTitle, secondStoryBody, secondStoryImage, secondStoryCtaLabel, secondStoryCtaHref,
+  video, stats[]{ value, suffix, label, plain },
+  whyHeading, whyLead, whyCards[]{ title, body, icon }
+}`);
+
+const storyHtml  = toHTML(page?.storyBody || []);
+const story2Html = toHTML(page?.secondStoryBody || []);
 ---
 
-<Base
-  title={"About | Colortek, Twenty-Five Years of Colour"}
-  description={"Colourtech Coating (India) Pvt. Ltd., est. 2000. India's first 1K stoving PU paints for container glass, a 10,000 sq ft R&D centre, ISO 9001:2015, and a plant in Dombivli, Mumbai."}
-  ogImage="/assets/images/hero/isotrap-gold-bottles-dark.jpg" jsonLd={jsonLd}
->
+<Base title={page?.seo?.title} description={page?.seo?.description}>
 
   <!-- ============ PAGE HERO ============ -->
   <section class="page-hero">
     <div class="page-hero__inner">
-      <h1 class="hero__title">The company<br>behind the colour<span class="dot">.</span></h1>
-      <p class="hero__sub">
-        Colourtech Coating began in 2000 with one conviction: coatings
-        engineered in India could match anyone in the world.
-      </p>
+      <h1 class="hero__title">{page?.headingLine1}{page?.headingLine2 && <br />}{page?.headingLine2}<span class="dot">.</span></h1>
+      <p class="hero__sub">{page?.intro}</p>
       <dl class="facts" data-reveal>
-        <div class="fact"><dt>Established</dt><dd>2000, family-owned</dd></div>
-        <div class="fact"><dt>Certified</dt><dd>ISO 9001:2015</dd></div>
-        <div class="fact"><dt>Capacity</dt><dd>9,000 tonnes a year</dd></div>
-        <div class="fact"><dt>Offices</dt><dd>Mumbai and Dubai</dd></div>
+        {(page?.facts || []).map((f) => (
+          <div class="fact"><dt>{f.label}</dt><dd>{f.value}</dd></div>
+        ))}
       </dl>
     </div>
   </section>
@@ -83,32 +70,22 @@ const jsonLd = {
   <section class="section" aria-label="Vision, mission and values">
     <div class="container">
       <div class="section-head section-head--sub" data-reveal>
-        <h2 class="section-head__title">Vision, mission, values<span class="dot">.</span></h2>
+        <h2 class="section-head__title">{page?.vmvHeading}<span class="dot">.</span></h2>
       </div>
 
       <div class="vmv">
-        <article class="vmv__panel" data-reveal>
-          <h3 class="vmv__title" style="--tag: var(--spec-1)">Vision</h3>
-          <p>To become the world's most trusted partner in advanced coating
-          technologies, delivering innovative, sustainable and high-performance
-          surface solutions that redefine quality, durability and design
-          across industries.</p>
-        </article>
-        <article class="vmv__panel" data-reveal style="--d: 90ms">
-          <h3 class="vmv__title" style="--tag: var(--spec-6)">Mission</h3>
-          <p>To develop innovative coating technologies that combine
-          performance, sustainability and reliability, while creating lasting
-          value for customers, industries and communities worldwide.</p>
-        </article>
+        {(page?.vmvPanels || []).map((panel, i) => (
+          <article class="vmv__panel" data-reveal style={i ? `--d: ${i * 90}ms` : undefined}>
+            <h3 class="vmv__title" style={`--tag: var(--${panel.colour || 'spec-1'})`}>{panel.title}</h3>
+            <p>{panel.body}</p>
+          </article>
+        ))}
       </div>
 
       <div class="tags tags--values" data-reveal style="--d: 180ms">
-        <span class="tag" style="--tag: var(--spec-1)">Innovation</span>
-        <span class="tag" style="--tag: var(--spec-2)">Integrity</span>
-        <span class="tag" style="--tag: var(--spec-3)">Quality</span>
-        <span class="tag" style="--tag: var(--spec-4)">Customer service</span>
-        <span class="tag" style="--tag: var(--spec-5)">Sustainability</span>
-        <span class="tag" style="--tag: var(--spec-6)">Continuous development</span>
+        {(page?.values || []).map((v, i) => (
+          <span class="tag" style={`--tag: var(--spec-${(i % 7) + 1})`}>{v}</span>
+        ))}
       </div>
     </div>
   </section>
@@ -134,22 +111,16 @@ const jsonLd = {
   <section class="section stats" aria-label="Colortek in numbers">
     <div class="container">
       <div class="stats__grid">
-        <div class="stat" data-reveal>
-          <span class="stat__value"><span data-count="25">25</span>+</span>
-          <span class="stat__label">Years in specialty coatings</span>
-        </div>
-        <div class="stat stat--flag" data-reveal style="--d: 70ms">
-          <span class="stat__value"><span data-count="750">750</span> <em>MT</em></span>
-          <span class="stat__label">Per month, 2026 capacity</span>
-        </div>
-        <div class="stat" data-reveal style="--d: 140ms">
-          <span class="stat__value"><span data-count="10000">10,000</span></span>
-          <span class="stat__label">Sq ft dedicated R&amp;D centre</span>
-        </div>
-        <div class="stat" data-reveal style="--d: 210ms">
-          <span class="stat__value"><span data-count="2">2</span></span>
-          <span class="stat__label">Patented products, one more filing</span>
-        </div>
+        {(page?.stats || []).map((stat, i) => (
+          <div class={`stat${i === 1 ? ' stat--flag' : ''}`} data-reveal style={i ? `--d: ${i * 70}ms` : undefined}>
+            <span class="stat__value">
+              {/^\d+$/.test(stat.value)
+                ? <span data-count={stat.value} data-count-plain={stat.plain ? '' : undefined}>{stat.value}</span>
+                : stat.value}{stat.suffix && (stat.suffix.length > 1 ? <> <em>{stat.suffix}</em></> : stat.suffix)}
+            </span>
+            <span class="stat__label">{stat.label}</span>
+          </div>
+        ))}
       </div>
     </div>
   </section>
@@ -159,26 +130,18 @@ const jsonLd = {
     <div class="jpin__stick">
       <div class="container">
         <div class="section-head section-head--sub section-head--ondark">
-          <h2 class="section-head__title">Twenty-five years in innovation<span class="dot">.</span></h2>
+          <h2 class="section-head__title">{page?.timelineHeading}<span class="dot">.</span></h2>
         </div>
       </div>
       <ol class="jpin__track">
-        <li class="jms" style="--rule: var(--spec-1)"><span class="jms__year">2000</span><p>Proprietorship founded. General industrial paints.</p></li>
-        <li class="jms" style="--rule: var(--spec-2)"><span class="jms__year">2003</span><p>1K lacquer coatings for glass bottles.</p></li>
-        <li class="jms" style="--rule: var(--spec-3)"><span class="jms__year">2006</span><p>New 10,000 sq ft production facility.</p></li>
-        <li class="jms" style="--rule: var(--spec-4)"><span class="jms__year">2007</span><p>Restructured as a Private Limited company.</p></li>
-        <li class="jms" style="--rule: var(--spec-5)"><span class="jms__year">2008</span><p>First export shipment to the Middle East.</p></li>
-        <li class="jms" style="--rule: var(--spec-6)"><span class="jms__year">2010</span><p>UV-cured lacquers for vacuum metallising.</p></li>
-        <li class="jms" style="--rule: var(--spec-7)"><span class="jms__year">2014</span><p>New production facility. 175 MT per month.</p></li>
-        <li class="jms" style="--rule: var(--spec-1)"><span class="jms__year">2015</span><p>Regional office established in Dubai.</p></li>
-        <li class="jms" style="--rule: var(--spec-2)"><span class="jms__year">2016</span><p>Original plant becomes a dedicated R&amp;D centre.</p></li>
-        <li class="jms" style="--rule: var(--spec-3)"><span class="jms__year">2018</span><p>Capacity expanded to 250 MT per month.</p></li>
-        <li class="jms" style="--rule: var(--spec-4)"><span class="jms__year">2022</span><p>Water-thinnable coatings for glass containers.</p></li>
-        <li class="jms" style="--rule: var(--spec-5)"><span class="jms__year">2023</span><p>METACOAT metal coating line launched.</p></li>
-        <li class="jms" style="--rule: var(--spec-6)"><span class="jms__year">2026</span><p>Customer Experience Centre. 750 MT per month.</p></li>
+        {(page?.milestones || []).map((m, i) => (
+          <li class="jms" style={`--rule: var(--spec-${(i % 7) + 1})`}>
+            <span class="jms__year">{m.year}</span><p>{m.text}</p>
+          </li>
+        ))}
       </ol>
       <div class="jpin__meta" aria-hidden="true">
-        <span>2000 &#8594; 2026</span>
+        <span>{page?.timelineRange}</span>
       </div>
     </div>
   </section>
@@ -266,8 +229,8 @@ const jsonLd = {
   <!-- ============ CTA ============ -->
   <section class="section cta-final" aria-label="Visit us">
     <div class="container">
-      <h2 class="cta-final__title" data-reveal>See the finishes in person<span class="dot">.</span></h2>
-      <p class="cta-final__lead" data-reveal>The plant and Experience Centre are in Dombivli; the regional office is in Dubai. Both doors open with one message.</p>
+      <h2 class="cta-final__title" data-reveal>{page?.cta?.title}<span class="dot">.</span></h2>
+      <p class="cta-final__lead" data-reveal>{page?.cta?.lead}</p>
       <div class="cta-final__actions" data-reveal>
         <a class="btn btn--ink" href="/contact/">Talk to us <span class="arrow" aria-hidden="true">&#8594;</span></a>
         <a class="cta-final__alt" href="https://wa.me/919819362380?text=Hi%20Colortek%2C%20I%27d%20like%20to%20visit%20the%20plant." target="_blank" rel="noopener">WhatsApp us</a>

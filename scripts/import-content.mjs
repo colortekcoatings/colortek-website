@@ -15,6 +15,7 @@ import { fileURLToPath } from 'node:url';
 import { makeRangeExtractor } from './lib/extract-ranges.mjs';
 import { makeGalleryExtractor } from './lib/extract-gallery.mjs';
 import { makeBlogExtractor } from './lib/extract-blog.mjs';
+import { makePageExtractor } from './lib/extract-pages.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const OLD_SITE = join(HERE, '..', '..', 'colertek');
@@ -407,6 +408,11 @@ const extractBlog = makeBlogExtractor({
 });
 const posts = await extractBlog();
 
+const pages = makePageExtractor({ read, strip, decode, toNewUrl, uploadImage });
+const aboutPage = await pages.extractAbout();
+const productsPage = await pages.extractProducts();
+const contactPage = await pages.extractContact();
+
 const ranges = [];
 for (const [file, slug] of RANGES) ranges.push(await extractRange(file, slug));
 process.stdout.write('\n');
@@ -422,6 +428,9 @@ for (const r of ranges) {
     `${systems} systems, ${r.gallery.images.length} gallery photos`
   );
 }
+console.log(`  About page    ${aboutPage.facts.length} facts, ${aboutPage.storyBody.length} paragraphs, ${aboutPage.stats.length} numbers, ${aboutPage.whyCards.length} cards`);
+console.log(`  Products page ${productsPage.capabilities.length} capability cards, ${productsPage.steps.length} steps`);
+console.log(`  Contact page  ${contactPage.channels.length} tiles, ${contactPage.substrateOptions.length} substrate options`);
 console.log(`  Blog          ${posts.length} articles, ${posts.reduce((n,p)=>n+p.body.length,0)} content blocks`);
 console.log(`  Gallery       ${galleryItems.length} finishes`);
 console.log(`                finishes used: ${vocab.finishes.join(', ')}`);
@@ -430,7 +439,7 @@ const ic = extractRange.stats();
 console.log(`  Tab icons     ${ic.iconsMatched} matched to icon files, ${ic.iconsMissed} unmatched`);
 console.log(`  Images        ${uploaded} uploaded, ${reused} reused`);
 
-const docs = [faq, settings, home, ...ranges, ...galleryItems, ...posts];
+const docs = [faq, settings, home, aboutPage, productsPage, contactPage, ...ranges, ...galleryItems, ...posts];
 
 if (DRY) {
   console.log('\n  DRY RUN — nothing written to Sanity.\n');

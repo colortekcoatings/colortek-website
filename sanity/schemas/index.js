@@ -5,6 +5,9 @@ import seo from './objects/seo.js';
 import siteSettings from './singletons/siteSettings.js';
 import homePage from './singletons/homePage.js';
 import faqPage, { qa } from './singletons/faqPage.js';
+import productsPage from './singletons/productsPage.js';
+import contactPage from './singletons/contactPage.js';
+import aboutPage from './singletons/aboutPage.js';
 
 // Repeatable content
 import rangePage, { system } from './documents/rangePage.js';
@@ -19,6 +22,9 @@ export const schemaTypes = [
   // singletons
   siteSettings,
   homePage,
+  aboutPage,
+  productsPage,
+  contactPage,
   faqPage,
   // documents
   rangePage,

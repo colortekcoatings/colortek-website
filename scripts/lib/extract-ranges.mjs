@@ -177,8 +177,33 @@ export function makeRangeExtractor({ read, strip, decode, toNewUrl, uploadImage,
 
   extractRange.stats = () => ({ iconsMatched, iconsMissed });
 
+  /**
+   * The row this range gets on the Products page: its one-line summary and
+   * small photo. Read from products.html so the two pages cannot disagree.
+   */
+  async function productsRow(slug) {
+    const list = read('products.html');
+    const block = list.split(`href="${slug}.html"`)[1];
+    if (!block) return {};
+    const card = block.slice(0, block.indexOf('</a>'));
+    const img = card.match(/<img class="range-row__thumb" src="([^"]+)"/);
+    const sub = card.match(/<span class="range-row__sub">([\s\S]*?)<\/span>/);
+    // Count only the row openers: 'range-row' also appears in __thumb, __name,
+    // __sub and __more, which would number the ranges 1, 6, 11, 16, 21.
+    const before = list.slice(0, list.indexOf(`href="${slug}.html"`));
+    // No +1: the row's own class="range-row" precedes its href in the same
+    // tag, so it is already counted.
+    const order = (before.match(/class="range-row"/g) || []).length;
+    return {
+      shortDescription: sub ? strip(sub[1]) : '',
+      thumbnail: img ? await uploadImage(img[1], '') : undefined,
+      order,
+    };
+  }
+
   async function extractRange(file, slug) {
     const html = read(file);
+    const row = await productsRow(slug);
     const key = slug.replace(/[^a-z0-9]/g, '');
 
     const h1 = html.match(/<h1 class="hero__title">([\s\S]*?)<\/h1>/);
@@ -229,6 +254,7 @@ export function makeRangeExtractor({ read, strip, decode, toNewUrl, uploadImage,
       slug: { _type: 'slug', current: slug },
       intro: sub ? strip(sub[1]) : '',
       heroImage: art ? await uploadImage(art[1], '') : undefined,
+      ...row,
       sectors,
       standaloneProducts: standalone,
       complianceBlock: extractCompliance(html, key),

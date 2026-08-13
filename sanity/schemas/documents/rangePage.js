@@ -138,7 +138,33 @@ export default defineType({
       type: 'image',
       group: 'content',
       options: { hotspot: true },
-      description: 'The floating product image beside the heading.',
+      description: 'The floating product image beside the heading. Also used on the Products page when hovering this range.',
+    }),
+    defineField({
+      name: 'shortDescription',
+      title: 'One-line summary',
+      type: 'string',
+      group: 'content',
+      description:
+        'Shown beside the name on the Products page, e.g. "Container, float and mirror glass".',
+    }),
+    defineField({
+      name: 'thumbnail',
+      title: 'Products page photo',
+      type: 'image',
+      group: 'content',
+      options: { hotspot: true },
+      description: 'The small photo in this range’s row on the Products page.',
+      fields: [
+        defineField({ name: 'alt', title: 'Image description', type: 'string' }),
+      ],
+    }),
+    defineField({
+      name: 'order',
+      title: 'Position on the Products page',
+      type: 'number',
+      group: 'content',
+      description: 'Lower numbers appear first. Glass 1, Plastics 2, Metal 3, Ceramics 4, 3D 5.',
     }),
     defineField({
       name: 'sectors',

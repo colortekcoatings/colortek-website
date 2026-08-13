@@ -1,5 +1,20 @@
 ---
 import Base from '../layouts/Base.astro';
+import { sanityClient } from 'sanity:client';
+import { responsive, altOf, urlFor } from '../lib/image.js';
+
+const page = await sanityClient.fetch(`*[_id == "productsPage"][0]{
+  heading, intro, seo, cta,
+  capabilitiesHeading, capabilitiesLead,
+  capabilities[]{ kicker, title, tags, colour, image },
+  stepsHeading, stepsLead, steps[]{ number, title, body }
+}`);
+
+// Generated from the five range pages rather than stored again here, so
+// adding a range is one edit instead of two that can drift apart.
+const ranges = await sanityClient.fetch(`*[_type == "rangePage"]|order(order asc, title asc){
+  title, slug, shortDescription, thumbnail, heroImage
+}`);
 ---
 
 <Base
@@ -11,11 +26,8 @@ import Base from '../layouts/Base.astro';
   <!-- ============ PAGE HERO ============ -->
   <section class="page-hero">
     <div class="page-hero__inner">
-      <h1 class="hero__title">Our coating ranges<span class="dot">.</span></h1>
-      <p class="hero__sub">
-        Every range is formulated for the surface it must bond to.
-        Choose your substrate.
-      </p>
+      <h1 class="hero__title hero__title--md">{page?.heading}<span class="dot">.</span></h1>
+      <p class="hero__sub">{page?.intro}</p>
     </div>
   </section>
 
@@ -25,45 +37,19 @@ import Base from '../layouts/Base.astro';
       <div class="ranges">
 
         <div class="ranges__rows">
-          <a class="range-row" href="/glass/" data-cutout="/assets/images/products/cutouts/glass-bottle.webp" data-reveal>
-            <img class="range-row__thumb" src="/assets/images/products/glass-teal-bottle.jpg" width="450" height="550"
-                 loading="lazy" decoding="async" alt="">
-            <span class="range-row__name">Glass</span>
-            <span class="range-row__sub">Container, float and mirror glass</span>
-            <span class="range-row__more">Explore <span class="arrow" aria-hidden="true">&#8594;</span></span>
-          </a>
-
-          <a class="range-row" href="/plastics/" data-cutout="/assets/images/products/cutouts/plastic-jar.webp" data-reveal style="--d: 60ms">
-            <img class="range-row__thumb" src="/assets/images/products/plastics-coloured-caps.jpg" width="450" height="524"
-                 loading="lazy" decoding="async" alt="">
-            <span class="range-row__name">Plastics</span>
-            <span class="range-row__sub">Caps, closures, appliances and toys</span>
-            <span class="range-row__more">Explore <span class="arrow" aria-hidden="true">&#8594;</span></span>
-          </a>
-
-          <a class="range-row" href="/metal/" data-cutout="/assets/images/products/cutouts/metal-bottles.webp" data-reveal style="--d: 120ms">
-            <img class="range-row__thumb" src="/assets/images/products/metal-duo-bottles.jpg" width="450" height="337"
-                 loading="lazy" decoding="async" alt="">
-            <span class="range-row__name">Metal</span>
-            <span class="range-row__sub">Water bottles and cookware exteriors</span>
-            <span class="range-row__more">Explore <span class="arrow" aria-hidden="true">&#8594;</span></span>
-          </a>
-
-          <a class="range-row" href="/ceramics/" data-cutout="/assets/images/products/cutouts/ceramic-mug.webp" data-reveal style="--d: 180ms">
-            <img class="range-row__thumb" src="/assets/images/products/ceramic-sablicoat-mug.jpg" width="450" height="550"
-                 loading="lazy" decoding="async" alt="">
-            <span class="range-row__name">Ceramics</span>
-            <span class="range-row__sub">Sublimation mugs and tableware</span>
-            <span class="range-row__more">Explore <span class="arrow" aria-hidden="true">&#8594;</span></span>
-          </a>
-
-          <a class="range-row" href="/3d/" data-cutout="/assets/images/products/cutouts/resin-ring.webp" data-reveal style="--d: 240ms">
-            <img class="range-row__thumb" src="/assets/images/products/3d-rachak-ring.jpg" width="450" height="500"
-                 loading="lazy" decoding="async" alt="">
-            <span class="range-row__name">3D</span>
-            <span class="range-row__sub">Casting resins for jewellery</span>
-            <span class="range-row__more">Explore <span class="arrow" aria-hidden="true">&#8594;</span></span>
-          </a>
+          {ranges.map((r) => {
+            const thumb = responsive(r.thumbnail, { widths: [450, 900] });
+            const cut = r.heroImage ? urlFor(r.heroImage).width(900).auto('format').url() : undefined;
+            return (
+              <a class="range-row" href={`/${r.slug.current}/`} data-cutout={cut} data-reveal>
+                <img class="range-row__thumb" src={thumb?.src} srcset={thumb?.srcset} sizes="220px"
+                     width="450" height="550" loading="lazy" decoding="async" alt="" />
+                <span class="range-row__name">{r.title}</span>
+                <span class="range-row__sub">{r.shortDescription}</span>
+                <span class="range-row__more">Explore <span class="arrow" aria-hidden="true">&#8594;</span></span>
+              </a>
+            );
+          })}
         </div>
 
         <!-- Swapped by main.js as the pointer moves down the rows. -->
@@ -84,56 +70,24 @@ import Base from '../layouts/Base.astro';
       </div>
 
       <div class="cap-cards">
-        <article class="cap-card" style="--group: var(--spec-5)" data-reveal>
-          <div class="cap-card__media">
-            <img src="/assets/images/about/reactor-operator.jpg" width="1600" height="1059"
-                 loading="lazy" decoding="async"
-                 alt="Operator working at a stainless steel reactor on the Colortek production floor">
-          </div>
-          <p class="cap-card__kicker">Process</p>
-          <h3 class="cap-card__title">How it cures</h3>
-          <div class="tags tags--tight">
-            <span class="tag">1K stoving</span>
-            <span class="tag">UV curing</span>
-            <span class="tag">Vacuum metallising</span>
-            <span class="tag">Water-based</span>
-            <span class="tag">Roller application</span>
-          </div>
-        </article>
-
-        <article class="cap-card" style="--group: var(--spec-2); --d: 80ms" data-reveal>
-          <div class="cap-card__media">
-            <img src="/assets/images/gallery/iridescent-ombre-bottles.jpg" width="1600" height="2133"
-                 loading="lazy" decoding="async"
-                 alt="Perfume bottles in iridescent ombre finishes on a dark ground">
-          </div>
-          <p class="cap-card__kicker">Finish</p>
-          <h3 class="cap-card__title">How it looks</h3>
-          <div class="tags tags--tight">
-            <span class="tag">Soft touch</span>
-            <span class="tag">High gloss &amp; matt</span>
-            <span class="tag">Glitter, pearl &amp; metallic</span>
-            <span class="tag">Crack, wrinkle &amp; dew drop</span>
-            <span class="tag">Glow &amp; thermochromic</span>
-          </div>
-        </article>
-
-        <article class="cap-card" style="--group: var(--spec-4); --d: 160ms" data-reveal>
-          <div class="cap-card__media">
-            <img src="/assets/images/products/metal-cookware-pan.jpg" width="900" height="675"
-                 loading="lazy" decoding="async"
-                 alt="Frying pan with a heat-resistant exterior coating">
-          </div>
-          <p class="cap-card__kicker">Performance</p>
-          <h3 class="cap-card__title">How it lasts</h3>
-          <div class="tags tags--tight">
-            <span class="tag">Scratch resistant</span>
-            <span class="tag">Heat resistant</span>
-            <span class="tag">Chemical resistant</span>
-            <span class="tag">Food contact safe</span>
-            <span class="tag">Low VOC</span>
-          </div>
-        </article>
+        {(page?.capabilities || []).map((card) => {
+          const img = responsive(card.image, { widths: [800, 1600] });
+          return (
+            <article class="cap-card" style={`--group: var(--${card.colour || 'spec-1'})`} data-reveal>
+              {card.image && (
+                <div class="cap-card__media">
+                  <img src={img?.src} srcset={img?.srcset} sizes="(max-width: 900px) 100vw, 33vw"
+                       loading="lazy" decoding="async" alt={altOf(card.image)} />
+                </div>
+              )}
+              <p class="cap-card__kicker">{card.kicker}</p>
+              <h3 class="cap-card__title">{card.title}</h3>
+              {card.tags?.length > 0 && (
+                <div class="tags tags--tight">{card.tags.map((t) => <span class="tag">{t}</span>)}</div>
+              )}
+            </article>
+          );
+        })}
       </div>
 
       <div class="cap-cta" data-reveal>
@@ -152,30 +106,14 @@ import Base from '../layouts/Base.astro';
       </div>
 
       <ol class="rail" data-reveal>
-        <li class="rail__step">
-          <span class="rail__node" aria-hidden="true"></span>
-          <span class="rail__num" aria-hidden="true">01</span>
-          <h3 class="rail__title">Share the brief</h3>
-          <p class="rail__text">Substrate, target finish and volume. A photo of the part is enough to start.</p>
-        </li>
-        <li class="rail__step">
-          <span class="rail__node" aria-hidden="true"></span>
-          <span class="rail__num" aria-hidden="true">02</span>
-          <h3 class="rail__title">We formulate</h3>
-          <p class="rail__text">The R&amp;D centre matches chemistry to your substrate, line speed and spec.</p>
-        </li>
-        <li class="rail__step">
-          <span class="rail__node" aria-hidden="true"></span>
-          <span class="rail__num" aria-hidden="true">03</span>
-          <h3 class="rail__title">Sample in days</h3>
-          <p class="rail__text">Custom samples are produced and shipped for approval on your own substrate.</p>
-        </li>
-        <li class="rail__step">
-          <span class="rail__node" aria-hidden="true"></span>
-          <span class="rail__num" aria-hidden="true">04</span>
-          <h3 class="rail__title">Scale with confidence</h3>
-          <p class="rail__text">Production under ISO 9001:2015, every batch tested and traceable to dispatch.</p>
-        </li>
+        {(page?.steps || []).map((s) => (
+          <li class="rail__step">
+            <span class="rail__node" aria-hidden="true"></span>
+            <span class="rail__num" aria-hidden="true">{s.number}</span>
+            <h3 class="rail__title">{s.title}</h3>
+            <p class="rail__text">{s.body}</p>
+          </li>
+        ))}
       </ol>
     </div>
   </section>
@@ -241,8 +179,8 @@ import Base from '../layouts/Base.astro';
   <!-- ============ CTA ============ -->
   <section class="section cta-final" aria-label="Start a project">
     <div class="container">
-      <h2 class="cta-final__title" data-reveal>Tell us what you need to coat<span class="dot">.</span></h2>
-      <p class="cta-final__lead" data-reveal>Substrate, finish and volume. We will tell you whether we already make it, or formulate it.</p>
+      <h2 class="cta-final__title" data-reveal>{page?.cta?.title}<span class="dot">.</span></h2>
+      <p class="cta-final__lead" data-reveal>{page?.cta?.lead}</p>
       <div class="cta-final__actions" data-reveal>
         <a class="btn btn--ink" href="/contact/">Talk to us <span class="arrow" aria-hidden="true">&#8594;</span></a>
         <a class="cta-final__alt" href="https://wa.me/919819362380?text=Hi%20Colortek%2C%20I%27d%20like%20to%20discuss%20a%20coating%20requirement." target="_blank" rel="noopener">WhatsApp us</a>
