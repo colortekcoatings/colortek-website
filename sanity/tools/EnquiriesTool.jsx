@@ -3,11 +3,16 @@ import { Box, Button, Card, Flex, Spinner, Stack, Text, TextInput } from '@sanit
 import { useClient } from 'sanity';
 
 /**
- * "Enquiries" screen inside the admin panel.
+ * "Enquiries" screen in the admin panel.
  *
- * Reads from a server-side function rather than talking to Netlify directly,
- * so the Netlify API key never reaches the browser. The user's Sanity session
- * is sent along and checked by that function before anything is returned.
+ * Reads enquiry documents straight from Sanity using the panel's own client,
+ * which is already signed in as the current user. There is no custom endpoint
+ * and no API key anywhere in this file.
+ *
+ * The first version of this screen called a Netlify function and tried to pass
+ * a Sanity token to it. That could not work: in the browser Sanity
+ * authenticates with cookies scoped to its own domain, which are never sent to
+ * netlify.app. Reading from Sanity directly sidesteps the problem entirely.
  */
 export default function EnquiriesTool() {
   const client = useClient({ apiVersion: '2024-01-01' });
@@ -16,43 +21,21 @@ export default function EnquiriesTool() {
   const [query, setQuery] = useState('');
   const [busy, setBusy] = useState(false);
 
-  const authFetch = useCallback(
-    async (init = {}) => {
-      const token = client.config().token;
-      return fetch('/api/enquiries' + (init.qs || ''), {
-        method: init.method || 'GET',
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
-      });
-    },
-    [client]
-  );
-
   const load = useCallback(async () => {
     setError('');
     setRows(null);
     try {
-      const res = await authFetch();
-
-      // Netlify Functions do not run on the local dev server, so /api/enquiries
-      // returns Astro's HTML 404 page. Parsing that as JSON gives an
-      // "Unexpected token '<'" error, which tells the reader nothing.
-      const type = res.headers.get('content-type') || '';
-      if (!type.includes('application/json')) {
-        throw new Error(
-          'Enquiries are only available on the published site — this screen ' +
-            'cannot load them while running on localhost. Open the admin panel ' +
-            'on the live address instead.'
-        );
-      }
-
-      const body = await res.json();
-      if (!res.ok) throw new Error(body.error || 'Could not load enquiries');
-      setRows(body.submissions || []);
+      const data = await client.fetch(
+        `*[_type == "enquiry"]|order(receivedAt desc)[0...500]{
+          _id, name, company, email, phone, substrate, message, receivedAt
+        }`
+      );
+      setRows(data || []);
     } catch (e) {
-      setError(e.message);
+      setError(e.message || 'Could not load enquiries');
       setRows([]);
     }
-  }, [authFetch]);
+  }, [client]);
 
   useEffect(() => {
     load();
@@ -71,16 +54,16 @@ export default function EnquiriesTool() {
   }, [rows, query]);
 
   const exportCsv = () => {
-    const head = ['Date', 'Name', 'Company', 'Email', 'Phone', 'Substrate', 'Message'];
-    const esc = (v) => `"${String(v || '').replace(/"/g, '""')}"`;
+    const head = ['Received', 'Name', 'Company', 'Email', 'Phone', 'Substrate', 'Message'];
+    const esc = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`;
     const csv = [
       head.join(','),
       ...filtered.map((r) =>
-        [r.date, r.name, r.company, r.email, r.phone, r.substrate, r.message].map(esc).join(',')
+        [r.receivedAt, r.name, r.company, r.email, r.phone, r.substrate, r.message].map(esc).join(',')
       ),
     ].join('\n');
     const a = document.createElement('a');
-    a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
+    a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
     a.download = `colortek-enquiries-${new Date().toISOString().slice(0, 10)}.csv`;
     a.click();
   };
@@ -89,15 +72,21 @@ export default function EnquiriesTool() {
     if (!window.confirm(`Delete the enquiry from ${row.name || 'this person'}? This cannot be undone.`)) return;
     setBusy(true);
     try {
-      const res = await authFetch({ method: 'DELETE', qs: `?id=${encodeURIComponent(row.id)}` });
-      if (!res.ok) throw new Error('Could not delete');
-      setRows((prev) => prev.filter((r) => r.id !== row.id));
+      await client.delete(row._id);
+      setRows((prev) => prev.filter((r) => r._id !== row._id));
     } catch (e) {
-      setError(e.message);
+      setError(e.message || 'Could not delete that enquiry');
     } finally {
       setBusy(false);
     }
   };
+
+  const when = (iso) =>
+    iso
+      ? new Date(iso).toLocaleString('en-GB', {
+          day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit',
+        })
+      : '';
 
   return (
     <Box padding={4}>
@@ -142,25 +131,22 @@ export default function EnquiriesTool() {
         {rows !== null && !filtered.length && !error && (
           <Card padding={5} radius={2} tone="transparent" border>
             <Text size={1} muted align="center">
-              {rows.length ? 'Nothing matches that search.' : 'No enquiries yet.'}
+              {rows.length
+                ? 'Nothing matches that search.'
+                : 'No enquiries yet. New ones appear here automatically.'}
             </Text>
           </Card>
         )}
 
         <Stack space={3}>
           {filtered.map((r) => (
-            <Card key={r.id} padding={4} radius={2} border>
+            <Card key={r._id} padding={4} radius={2} border>
               <Stack space={3}>
                 <Flex align="center" gap={3} wrap="wrap">
                   <Text weight="semibold">{r.name || 'No name given'}</Text>
                   {r.company && <Text size={1} muted>{r.company}</Text>}
                   <Box flex={1} />
-                  <Text size={1} muted>
-                    {r.date ? new Date(r.date).toLocaleString('en-GB', {
-                      day: 'numeric', month: 'short', year: 'numeric',
-                      hour: '2-digit', minute: '2-digit',
-                    }) : ''}
-                  </Text>
+                  <Text size={1} muted>{when(r.receivedAt)}</Text>
                 </Flex>
 
                 <Flex gap={4} wrap="wrap">
@@ -181,7 +167,8 @@ export default function EnquiriesTool() {
                       mode="ghost"
                       text="Reply by email"
                       onClick={() => {
-                        window.location.href = `mailto:${r.email}?subject=Re: your enquiry to Colortek`;
+                        window.location.href =
+                          `mailto:${r.email}?subject=${encodeURIComponent('Re: your enquiry to Colortek')}`;
                       }}
                     />
                   )}
