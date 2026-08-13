@@ -1,0 +1,15 @@
+# Secrets — never commit. The write token can edit and delete all content.
+.env
+.env.*
+!.env.example
+
+# Build output and dependencies
+dist/
+node_modules/
+.astro/
+
+# Sanity
+.sanity/
+
+# OS
+.DS_Store

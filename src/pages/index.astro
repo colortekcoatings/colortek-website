@@ -1,0 +1,220 @@
+---
+import Base from '../layouts/Base.astro';
+import { sanityClient } from 'sanity:client';
+import { responsive, altOf } from '../lib/image.js';
+
+const page = await sanityClient.fetch(`*[_id == "homePage"][0]{
+  kicker, headingLine1, headingLine2, heroSub, seo,
+  panels[]{ title, body, ctaLabel, ctaHref, image },
+  stats[]{ value, suffix, label, plain },
+  industries[]{ label, href, image }
+}`);
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Colourtech Coating (India) Pvt. Ltd.",
+  "alternateName": "Colortek",
+  "url": "https://colortek.in/",
+  "foundingDate": "2000",
+  "email": "info@colortek.in",
+  "telephone": "+91-9819362380",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "B-37, MIDC Phase I, Kalyan Road, Golavali, Shilphata",
+    "addressLocality": "Dombivli (E)",
+    "addressRegion": "Maharashtra",
+    "postalCode": "421203",
+    "addressCountry": "IN"
+  },
+  "hasCredential": "ISO 9001:2015"
+};
+---
+
+<Base
+  title={page?.seo?.title}
+  description={page?.seo?.description}
+  jsonLd={jsonLd}
+>
+
+  <!-- ============ HERO + STACKING PANELS ============ -->
+  <section class="stack" aria-label="Colortek at a glance">
+
+    <div class="hero">
+      <div class="hero__inner">
+        <p class="hero__kicker">{page?.kicker}</p>
+        <h1 class="hero__title">
+          {page?.headingLine1}{page?.headingLine2 && <br />}{page?.headingLine2}<span class="dot">.</span>
+        </h1>
+        <p class="hero__sub">{page?.heroSub}</p>
+        <div class="hero__actions">
+          <a class="btn btn--ink" href="/products/">Explore our coatings <span class="arrow" aria-hidden="true">&#8594;</span></a>
+          <a class="btn btn--outline" href="/contact/">Talk to us <span class="arrow" aria-hidden="true">&#8594;</span></a>
+        </div>
+      </div>
+    </div>
+
+    {(page?.panels || []).map((panel) => {
+      const img = responsive(panel.image, { widths: [900, 1400, 1900] });
+      return (
+        <article class="panel">
+          <img class="panel__media" src={img?.src} srcset={img?.srcset}
+               sizes="100vw" alt={altOf(panel.image)} loading="lazy" decoding="async" />
+          <div class="panel__scrim" aria-hidden="true"></div>
+          <div class="panel__inner">
+            <h2 class="panel__title">{panel.title}<span class="dot">.</span></h2>
+            <p class="panel__sub">{panel.body}</p>
+            {panel.ctaLabel && (
+              <div class="panel__actions">
+                <a class="btn btn--paper" href={panel.ctaHref}>{panel.ctaLabel} <span class="arrow" aria-hidden="true">&#8594;</span></a>
+              </div>
+            )}
+          </div>
+        </article>
+      );
+    })}
+
+  </section>
+
+  <!-- ============ AT A GLANCE ============ -->
+  <section class="section stats" aria-label="Colortek at a glance">
+    <div class="container">
+      <div class="stats__grid">
+        {(page?.stats || []).map((stat, i) => (
+          <div class={`stat${i === 1 ? ' stat--flag' : ''}`} data-reveal style={i ? `--d: ${i * 70}ms` : undefined}>
+            <span class="stat__value">
+              {/^\d+$/.test(stat.value)
+                ? <span data-count={stat.value} data-count-plain={stat.plain ? '' : undefined}>{stat.value}</span>
+                : stat.value}{stat.suffix && (stat.suffix.length > 1 ? <> <em>{stat.suffix}</em></> : stat.suffix)}
+            </span>
+            <span class="stat__label">{stat.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ INDUSTRIES ============ -->
+  <section class="section industries" aria-label="Industries we serve">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <h2 class="section-head__title">Industries we serve<span class="dot">.</span></h2>
+        <p class="section-head__lead">A few of the places our coatings ship, from fragrance bottles to float glass and cast jewellery.</p>
+      </div>
+    </div>
+    <div class="industry-marquee" data-reveal aria-label="Industries served">
+      <div class="industry-marquee__track">
+        {[false, true].map((isDuplicate) => (
+          <div class="industry-marquee__group" aria-hidden={isDuplicate ? 'true' : undefined}>
+            {(page?.industries || []).map((item) => {
+              const img = responsive(item.image, { widths: [232, 464] });
+              return (
+                <a class="industry-marquee__link" href={item.href} tabindex={isDuplicate ? -1 : undefined}>
+                  <figure>
+                    <div class="thumb">
+                      <img src={img?.src} srcset={img?.srcset} sizes="232px"
+                           width="232" height="288" loading="lazy" decoding="async" alt={altOf(item.image)} />
+                    </div>
+                    <figcaption>{item.label}</figcaption>
+                  </figure>
+                </a>
+              );
+            })}
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ RESPONSIBILITY ============ -->
+  <section class="section" aria-label="Sustainability and corporate social responsibility">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <h2 class="section-head__title">Responsibility<span class="dot">.</span></h2>
+        <p class="section-head__lead">Real commitments to the people, land and animals around the plant, funded year after year.</p>
+      </div>
+
+      <div class="csr">
+        <article class="csr-card" style="--tag: var(--spec-6)" data-reveal>
+          <div class="csr-card__media">
+            <img src="/assets/images/about/csr-education.jpg" width="1100" height="825"
+                 loading="lazy" decoding="async"
+                 alt="School children standing in a classroom in front of a blackboard">
+          </div>
+          <p class="csr-card__kicker">Education &amp; health</p>
+          <h3 class="csr-card__title">Support that reaches young lives</h3>
+          <p class="csr-card__text">Schooling for underprivileged children and aid for young cancer and heart patients.</p>
+        </article>
+
+        <article class="csr-card" style="--tag: var(--spec-4); --d: 80ms" data-reveal>
+          <div class="csr-card__media">
+            <img src="/assets/images/about/csr-plantation.jpg" width="1100" height="1434"
+                 loading="lazy" decoding="async"
+                 alt="Hands planting a young green sapling into the soil">
+          </div>
+          <p class="csr-card__kicker">Planet</p>
+          <h3 class="csr-card__title">Plantation drives, every year</h3>
+          <p class="csr-card__text">Carbon-absorbing tree plantation drives in the communities around the plant.</p>
+        </article>
+
+        <article class="csr-card" style="--tag: var(--spec-2); --d: 160ms" data-reveal>
+          <div class="csr-card__media">
+            <img src="/assets/images/about/csr-animal-welfare.jpg" width="1100" height="825"
+                 loading="lazy" decoding="async"
+                 alt="Cows resting inside a covered animal shelter">
+          </div>
+          <p class="csr-card__kicker">Animal welfare</p>
+          <h3 class="csr-card__title">Shelter, feeding and care for animals</h3>
+          <p class="csr-card__text">Animal welfare and healthcare initiatives, from shelters and feeding to treatment support.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT BAND ============ -->
+  <section class="contact-band" aria-label="Contact">
+    <div class="container">
+      <div class="cband">
+        <div class="cband__copy" data-reveal>
+          <h2 class="contact-band__title">Tell us what you need to coat<span class="dot">.</span></h2>
+          <p class="cband__lead">
+            Any substrate, any finish, any volume. If we don't already make it,
+            the R&amp;D centre will formulate it for you.
+          </p>
+          <a class="btn btn--paper" href="/contact/">Talk to us <span class="arrow" aria-hidden="true">&#8594;</span></a>
+          <p class="cband__promise">Custom samples, shipped for approval on your own substrate.</p>
+        </div>
+
+        <ul class="cband__channels" data-reveal style="--d: 90ms">
+          <li>
+            <a href="tel:+919819362380">
+              <span class="cband__label">Call</span>
+              <strong>+91 98193 62380</strong>
+              <span class="arrow" aria-hidden="true">&#8594;</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://wa.me/919819362380?text=Hi%20Colortek%2C%20I%27d%20like%20to%20discuss%20a%20coating%20requirement."
+               target="_blank" rel="noopener">
+              <span class="cband__label">WhatsApp</span>
+              <strong>Chat with us</strong>
+              <span class="arrow" aria-hidden="true">&#8594;</span>
+            </a>
+          </li>
+          <li>
+            <a href="mailto:info@colortek.in">
+              <span class="cband__label">Email</span>
+              <strong>info@colortek.in</strong>
+              <span class="arrow" aria-hidden="true">&#8594;</span>
+            </a>
+          </li>
+          <li class="cband__row">
+            <span class="cband__label">Offices</span>
+            <strong>Mumbai, India and Dubai, UAE</strong>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</Base>

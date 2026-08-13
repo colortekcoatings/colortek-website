@@ -1,0 +1,254 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+  title={"Products | Colortek Coating Ranges"}
+  description={"Colortek coating ranges for glass, plastics, metal, ceramics and 3D printing resins. ISOTRAP, AQUATRAP, UVAC, METACOAT, SILCOOK, SABLICOAT and RACHAK."}
+  ogImage="/assets/images/hero/isotrap-gold-bottles-dark.jpg"
+>
+
+  <!-- ============ PAGE HERO ============ -->
+  <section class="page-hero">
+    <div class="page-hero__inner">
+      <h1 class="hero__title">Our coating ranges<span class="dot">.</span></h1>
+      <p class="hero__sub">
+        Every range is formulated for the surface it must bond to.
+        Choose your substrate.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ RANGES ============ -->
+  <section class="section" aria-label="Coating ranges by substrate">
+    <div class="container">
+      <div class="ranges">
+
+        <div class="ranges__rows">
+          <a class="range-row" href="/glass/" data-cutout="/assets/images/products/cutouts/glass-bottle.webp" data-reveal>
+            <img class="range-row__thumb" src="/assets/images/products/glass-teal-bottle.jpg" width="450" height="550"
+                 loading="lazy" decoding="async" alt="">
+            <span class="range-row__name">Glass</span>
+            <span class="range-row__sub">Container, float and mirror glass</span>
+            <span class="range-row__more">Explore <span class="arrow" aria-hidden="true">&#8594;</span></span>
+          </a>
+
+          <a class="range-row" href="/plastics/" data-cutout="/assets/images/products/cutouts/plastic-jar.webp" data-reveal style="--d: 60ms">
+            <img class="range-row__thumb" src="/assets/images/products/plastics-coloured-caps.jpg" width="450" height="524"
+                 loading="lazy" decoding="async" alt="">
+            <span class="range-row__name">Plastics</span>
+            <span class="range-row__sub">Caps, closures, appliances and toys</span>
+            <span class="range-row__more">Explore <span class="arrow" aria-hidden="true">&#8594;</span></span>
+          </a>
+
+          <a class="range-row" href="/metal/" data-cutout="/assets/images/products/cutouts/metal-bottles.webp" data-reveal style="--d: 120ms">
+            <img class="range-row__thumb" src="/assets/images/products/metal-duo-bottles.jpg" width="450" height="337"
+                 loading="lazy" decoding="async" alt="">
+            <span class="range-row__name">Metal</span>
+            <span class="range-row__sub">Water bottles and cookware exteriors</span>
+            <span class="range-row__more">Explore <span class="arrow" aria-hidden="true">&#8594;</span></span>
+          </a>
+
+          <a class="range-row" href="/ceramics/" data-cutout="/assets/images/products/cutouts/ceramic-mug.webp" data-reveal style="--d: 180ms">
+            <img class="range-row__thumb" src="/assets/images/products/ceramic-sablicoat-mug.jpg" width="450" height="550"
+                 loading="lazy" decoding="async" alt="">
+            <span class="range-row__name">Ceramics</span>
+            <span class="range-row__sub">Sublimation mugs and tableware</span>
+            <span class="range-row__more">Explore <span class="arrow" aria-hidden="true">&#8594;</span></span>
+          </a>
+
+          <a class="range-row" href="/3d/" data-cutout="/assets/images/products/cutouts/resin-ring.webp" data-reveal style="--d: 240ms">
+            <img class="range-row__thumb" src="/assets/images/products/3d-rachak-ring.jpg" width="450" height="500"
+                 loading="lazy" decoding="async" alt="">
+            <span class="range-row__name">3D</span>
+            <span class="range-row__sub">Casting resins for jewellery</span>
+            <span class="range-row__more">Explore <span class="arrow" aria-hidden="true">&#8594;</span></span>
+          </a>
+        </div>
+
+        <!-- Swapped by main.js as the pointer moves down the rows. -->
+        <div class="ranges__panel" aria-hidden="true">
+          <img src="/assets/images/products/cutouts/glass-bottle.webp" width="1792" height="2400" decoding="async" alt="">
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CAPABILITIES ============ -->
+  <section class="section" aria-label="What our chemistry can do">
+    <div class="container">
+      <div class="section-head section-head--sub" data-reveal>
+        <h2 class="section-head__title">One partner, every finish<span class="dot">.</span></h2>
+        <p class="section-head__lead">Cure, finish and performance are engineered together in the R&amp;D centre. You specify the result; we build the system behind it.</p>
+      </div>
+
+      <div class="cap-cards">
+        <article class="cap-card" style="--group: var(--spec-5)" data-reveal>
+          <div class="cap-card__media">
+            <img src="/assets/images/about/reactor-operator.jpg" width="1600" height="1059"
+                 loading="lazy" decoding="async"
+                 alt="Operator working at a stainless steel reactor on the Colortek production floor">
+          </div>
+          <p class="cap-card__kicker">Process</p>
+          <h3 class="cap-card__title">How it cures</h3>
+          <div class="tags tags--tight">
+            <span class="tag">1K stoving</span>
+            <span class="tag">UV curing</span>
+            <span class="tag">Vacuum metallising</span>
+            <span class="tag">Water-based</span>
+            <span class="tag">Roller application</span>
+          </div>
+        </article>
+
+        <article class="cap-card" style="--group: var(--spec-2); --d: 80ms" data-reveal>
+          <div class="cap-card__media">
+            <img src="/assets/images/gallery/iridescent-ombre-bottles.jpg" width="1600" height="2133"
+                 loading="lazy" decoding="async"
+                 alt="Perfume bottles in iridescent ombre finishes on a dark ground">
+          </div>
+          <p class="cap-card__kicker">Finish</p>
+          <h3 class="cap-card__title">How it looks</h3>
+          <div class="tags tags--tight">
+            <span class="tag">Soft touch</span>
+            <span class="tag">High gloss &amp; matt</span>
+            <span class="tag">Glitter, pearl &amp; metallic</span>
+            <span class="tag">Crack, wrinkle &amp; dew drop</span>
+            <span class="tag">Glow &amp; thermochromic</span>
+          </div>
+        </article>
+
+        <article class="cap-card" style="--group: var(--spec-4); --d: 160ms" data-reveal>
+          <div class="cap-card__media">
+            <img src="/assets/images/products/metal-cookware-pan.jpg" width="900" height="675"
+                 loading="lazy" decoding="async"
+                 alt="Frying pan with a heat-resistant exterior coating">
+          </div>
+          <p class="cap-card__kicker">Performance</p>
+          <h3 class="cap-card__title">How it lasts</h3>
+          <div class="tags tags--tight">
+            <span class="tag">Scratch resistant</span>
+            <span class="tag">Heat resistant</span>
+            <span class="tag">Chemical resistant</span>
+            <span class="tag">Food contact safe</span>
+            <span class="tag">Low VOC</span>
+          </div>
+        </article>
+      </div>
+
+      <div class="cap-cta" data-reveal>
+        <p>Don't see your process or finish? The R&amp;D centre formulates to order.</p>
+        <a class="btn btn--outline" href="/contact/">Talk to us <span class="arrow" aria-hidden="true">&#8594;</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SAMPLING ============ -->
+  <section class="section" aria-label="From brief to production">
+    <div class="container">
+      <div class="section-head section-head--sub" data-reveal>
+        <h2 class="section-head__title">From brief to production<span class="dot">.</span></h2>
+        <p class="section-head__lead">Four steps. The first one is an email.</p>
+      </div>
+
+      <ol class="rail" data-reveal>
+        <li class="rail__step">
+          <span class="rail__node" aria-hidden="true"></span>
+          <span class="rail__num" aria-hidden="true">01</span>
+          <h3 class="rail__title">Share the brief</h3>
+          <p class="rail__text">Substrate, target finish and volume. A photo of the part is enough to start.</p>
+        </li>
+        <li class="rail__step">
+          <span class="rail__node" aria-hidden="true"></span>
+          <span class="rail__num" aria-hidden="true">02</span>
+          <h3 class="rail__title">We formulate</h3>
+          <p class="rail__text">The R&amp;D centre matches chemistry to your substrate, line speed and spec.</p>
+        </li>
+        <li class="rail__step">
+          <span class="rail__node" aria-hidden="true"></span>
+          <span class="rail__num" aria-hidden="true">03</span>
+          <h3 class="rail__title">Sample in days</h3>
+          <p class="rail__text">Custom samples are produced and shipped for approval on your own substrate.</p>
+        </li>
+        <li class="rail__step">
+          <span class="rail__node" aria-hidden="true"></span>
+          <span class="rail__num" aria-hidden="true">04</span>
+          <h3 class="rail__title">Scale with confidence</h3>
+          <p class="rail__text">Production under ISO 9001:2015, every batch tested and traceable to dispatch.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ COMPLIANCE ============ -->
+  <section class="section compliance" aria-label="Certifications and compliance">
+    <div class="container">
+      <div class="section-head section-head--sub" data-reveal>
+        <h2 class="section-head__title">Independently certified<span class="dot">.</span></h2>
+        <p class="section-head__lead">Verified by SGS, an independent laboratory. Your compliance team can check every number.</p>
+      </div>
+
+      <div class="cert-plate" data-reveal>
+        <div class="cert-plate__grid">
+          <div class="cred">
+            <strong>ISO 9001:2015</strong>
+            <span>Quality management, facility-wide</span>
+            <em>Certified facility</em>
+          </div>
+          <div class="cred">
+            <strong>REACH (EU)</strong>
+            <span>ISOTRAP screened for SVHC</span>
+            <em>SGS MAN:HL:1548009535</em>
+          </div>
+          <div class="cred">
+            <strong>TSCA (USA)</strong>
+            <span>ISOTRAP tested to US standards</span>
+            <em>SGS MAN:HL:1648000316</em>
+          </div>
+          <div class="cred">
+            <strong>FDA food contact</strong>
+            <span>METACOAT food-contact tested</span>
+            <em>SGS MAN:HL:1748000914</em>
+          </div>
+        </div>
+        <p class="cert-plate__foot">
+          Technical and safety datasheets (TDS &amp; MSDS) are available for every system.
+          <a href="/contact/">Request datasheets <span class="arrow" aria-hidden="true">&#8594;</span></a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FILM ============ -->
+  <section class="section film-section" aria-label="Colortek finishes in motion">
+    <div class="container">
+      <div class="film" data-reveal>
+        <video class="film__video" autoplay muted loop playsinline preload="metadata"
+               poster="/assets/videos/colortek-film-poster.jpg"
+               aria-label="Film of Colortek coated products and the production floor">
+          <source src="/assets/videos/colortek-film.mp4" type="video/mp4">
+        </video>
+        <div class="film__scrim" aria-hidden="true"></div>
+        <div class="film__body">
+          <h2 class="film__title">Colour, in motion<span class="dot">.</span></h2>
+          <p class="film__sub">Every frame is a Colortek finish, shot on our own products and our own line.</p>
+        </div>
+        <button class="film__toggle" type="button">Pause</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CTA ============ -->
+  <section class="section cta-final" aria-label="Start a project">
+    <div class="container">
+      <h2 class="cta-final__title" data-reveal>Tell us what you need to coat<span class="dot">.</span></h2>
+      <p class="cta-final__lead" data-reveal>Substrate, finish and volume. We will tell you whether we already make it, or formulate it.</p>
+      <div class="cta-final__actions" data-reveal>
+        <a class="btn btn--ink" href="/contact/">Talk to us <span class="arrow" aria-hidden="true">&#8594;</span></a>
+        <a class="cta-final__alt" href="https://wa.me/919819362380?text=Hi%20Colortek%2C%20I%27d%20like%20to%20discuss%20a%20coating%20requirement." target="_blank" rel="noopener">WhatsApp us</a>
+        <a class="cta-final__alt" href="tel:+919819362380">Call +91 98193 62380</a>
+      </div>
+    </div>
+  </section>
+
+</Base>

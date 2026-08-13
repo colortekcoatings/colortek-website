@@ -1,0 +1,33 @@
+---
+/**
+ * Inline an icon from assets/icons by name.
+ *
+ * Read from disk at build time and pasted into the HTML, matching how the
+ * hand-written site did it: no icon font, no runtime request, and the glyph
+ * inherits the surrounding text colour via currentColor.
+ */
+import { readFileSync } from 'node:fs';
+
+const { name, class: className = '', size = 22 } = Astro.props;
+
+const cache = globalThis.__iconCache ?? (globalThis.__iconCache = new Map());
+
+let svg = '';
+if (name) {
+  if (!cache.has(name)) {
+    try {
+      cache.set(name, readFileSync(`public/assets/icons/${name}.svg`, 'utf8'));
+    } catch {
+      // A missing icon should not break the page; the tab still renders.
+      console.warn(`[Icon] no such icon: ${name}.svg`);
+      cache.set(name, '');
+    }
+  }
+  svg = cache.get(name);
+}
+
+// The stored files carry no width/height so each usage can size its own.
+const sized = svg
+  .replace('<svg', `<svg width="${size}" height="${size}" aria-hidden="true"${className ? ` class="${className}"` : ''}`);
+---
+{sized && <Fragment set:html={sized} />}

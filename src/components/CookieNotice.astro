@@ -1,0 +1,62 @@
+---
+/**
+ * Cookie consent notice.
+ *
+ * Nothing that tracks a visitor loads until they accept — that is the part
+ * that matters legally. India's DPDP Act 2023 and the EU's GDPR both require
+ * consent BEFORE analytics runs, not a banner that appears while it already is.
+ *
+ * The site sets no cookies of its own. This gates analytics only, so if the
+ * client never adds a measurement ID the notice still behaves correctly.
+ */
+const { measurementId } = Astro.props;
+---
+
+<div class="cookie" id="cookie-notice" hidden>
+  <p class="cookie__text">
+    We use cookies to understand how the site is used. Nothing is collected
+    until you accept. See our <a href="/privacy/">privacy notice</a>.
+  </p>
+  <div class="cookie__actions">
+    <button class="btn btn--outline" type="button" data-cookie="decline">Decline</button>
+    <button class="btn btn--ink" type="button" data-cookie="accept">Accept</button>
+  </div>
+</div>
+
+<script is:inline define:vars={{ measurementId }}>
+  (function () {
+    var KEY = 'colortek-consent';
+    var notice = document.getElementById('cookie-notice');
+
+    function loadAnalytics() {
+      if (!measurementId) return;
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=' + measurementId;
+      document.head.appendChild(s);
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { window.dataLayer.push(arguments); }
+      window.gtag = gtag;
+      gtag('js', new Date());
+      // anonymize_ip keeps the visitor's address out of the analytics record.
+      gtag('config', measurementId, { anonymize_ip: true });
+    }
+
+    var saved = null;
+    try { saved = localStorage.getItem(KEY); } catch (e) {}
+
+    if (saved === 'accepted') {
+      loadAnalytics();
+    } else if (saved !== 'declined') {
+      notice.hidden = false;
+    }
+
+    notice.addEventListener('click', function (e) {
+      var choice = e.target.getAttribute && e.target.getAttribute('data-cookie');
+      if (!choice) return;
+      try { localStorage.setItem(KEY, choice === 'accept' ? 'accepted' : 'declined'); } catch (e) {}
+      notice.hidden = true;
+      if (choice === 'accept') loadAnalytics();
+    });
+  })();
+</script>

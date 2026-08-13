@@ -1,0 +1,17 @@
+---
+import RangePage from '../components/RangePage.astro';
+import { sanityClient } from 'sanity:client';
+
+// All five substrate pages share one template; only the slug differs.
+const page = await sanityClient.fetch(
+  `*[_type == "rangePage" && slug.current == $slug][0]{
+    title, slug, intro, heroImage, seo, cta, complianceBlock,
+    sectors[]{ label, anchor, icon, compliance, products[]{...} },
+    standaloneProducts[]{...},
+    gallery{ title, lead, images[] }
+  }`,
+  { slug: '3d' }
+);
+---
+
+<RangePage page={page} />

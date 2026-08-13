@@ -1,0 +1,279 @@
+---
+import Base from '../layouts/Base.astro';
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  "mainEntity": {
+    "@type": "Organization",
+    "name": "Colourtech Coating (India) Pvt. Ltd.",
+    "alternateName": "Colortek",
+    "url": "https://colortek.in/",
+    "foundingDate": "2000",
+    "email": "info@colortek.in",
+    "telephone": "+91-9819362380",
+    "hasCredential": "ISO 9001:2015",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "B-37, MIDC Phase I, Kalyan Road, Golavali, Shilphata",
+      "addressLocality": "Dombivli (E)",
+      "addressRegion": "Maharashtra",
+      "postalCode": "421203",
+      "addressCountry": "IN"
+    }
+  }
+};
+---
+
+<Base
+  title={"About | Colortek, Twenty-Five Years of Colour"}
+  description={"Colourtech Coating (India) Pvt. Ltd., est. 2000. India's first 1K stoving PU paints for container glass, a 10,000 sq ft R&D centre, ISO 9001:2015, and a plant in Dombivli, Mumbai."}
+  ogImage="/assets/images/hero/isotrap-gold-bottles-dark.jpg" jsonLd={jsonLd}
+>
+
+  <!-- ============ PAGE HERO ============ -->
+  <section class="page-hero">
+    <div class="page-hero__inner">
+      <h1 class="hero__title">The company<br>behind the colour<span class="dot">.</span></h1>
+      <p class="hero__sub">
+        Colourtech Coating began in 2000 with one conviction: coatings
+        engineered in India could match anyone in the world.
+      </p>
+      <dl class="facts" data-reveal>
+        <div class="fact"><dt>Established</dt><dd>2000, family-owned</dd></div>
+        <div class="fact"><dt>Certified</dt><dd>ISO 9001:2015</dd></div>
+        <div class="fact"><dt>Capacity</dt><dd>9,000 tonnes a year</dd></div>
+        <div class="fact"><dt>Offices</dt><dd>Mumbai and Dubai</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ============ STORY ============ -->
+  <section class="section" aria-label="Our story">
+    <div class="container">
+      <div class="story">
+        <div class="story__copy" data-reveal>
+          <h2 class="story__title">India's first, since 2000<span class="dot">.</span></h2>
+          <p>
+            Colortek was the first manufacturer in India to produce 1K stoving
+            PU paints for container glass, at a time when every serious
+            perfume brand imported its lacquers. Twenty-five years later the
+            same family-run plant in Dombivli ships ten coating systems across
+            five substrates, from patented ISOTRAP to 24K gold INSHINE.
+          </p>
+          <p>
+            Production has grown from five tonnes a year to a nine-thousand-tonne
+            annual capacity, and every batch is still formulated, mixed and
+            tested in-house, with key raw materials produced on site.
+          </p>
+          <p class="story__tagline">
+            "Your success is our mission. Together, we paint a brighter future."
+          </p>
+        </div>
+        <figure class="story__media" data-reveal style="--d: 90ms">
+          <img src="/assets/images/gallery/metallic-cylinders-square.jpg" width="1200" height="1200"
+               loading="lazy" decoding="async"
+               alt="A row of cylinder bottles coated in gold, magenta, bronze, blue and copper metallics">
+          <figcaption>One shape, five of the hundreds of shades the plant can hold.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ VISION / MISSION / VALUES ============ -->
+  <section class="section" aria-label="Vision, mission and values">
+    <div class="container">
+      <div class="section-head section-head--sub" data-reveal>
+        <h2 class="section-head__title">Vision, mission, values<span class="dot">.</span></h2>
+      </div>
+
+      <div class="vmv">
+        <article class="vmv__panel" data-reveal>
+          <h3 class="vmv__title" style="--tag: var(--spec-1)">Vision</h3>
+          <p>To become the world's most trusted partner in advanced coating
+          technologies, delivering innovative, sustainable and high-performance
+          surface solutions that redefine quality, durability and design
+          across industries.</p>
+        </article>
+        <article class="vmv__panel" data-reveal style="--d: 90ms">
+          <h3 class="vmv__title" style="--tag: var(--spec-6)">Mission</h3>
+          <p>To develop innovative coating technologies that combine
+          performance, sustainability and reliability, while creating lasting
+          value for customers, industries and communities worldwide.</p>
+        </article>
+      </div>
+
+      <div class="tags tags--values" data-reveal style="--d: 180ms">
+        <span class="tag" style="--tag: var(--spec-1)">Innovation</span>
+        <span class="tag" style="--tag: var(--spec-2)">Integrity</span>
+        <span class="tag" style="--tag: var(--spec-3)">Quality</span>
+        <span class="tag" style="--tag: var(--spec-4)">Customer service</span>
+        <span class="tag" style="--tag: var(--spec-5)">Sustainability</span>
+        <span class="tag" style="--tag: var(--spec-6)">Continuous development</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FACTORY FILM ============ -->
+  <section class="section section--flush" aria-label="Inside the plant">
+    <div class="container">
+      <div class="vplayer" data-reveal>
+        <video class="vplayer__video" preload="none" playsinline
+               poster="/assets/videos/factory-poster.jpg">
+          <source src="/assets/videos/colortek-factory.mp4" type="video/mp4">
+        </video>
+        <button class="vplayer__cover" type="button">
+          <span class="vplayer__play" aria-hidden="true">&#9654;</span>
+          <span class="vplayer__title">Inside the plant<span class="dot">.</span></span>
+          <span class="vplayer__sub">The Dombivli factory, on film. Press play.</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ AT A GLANCE ============ -->
+  <section class="section stats" aria-label="Colortek in numbers">
+    <div class="container">
+      <div class="stats__grid">
+        <div class="stat" data-reveal>
+          <span class="stat__value"><span data-count="25">25</span>+</span>
+          <span class="stat__label">Years in specialty coatings</span>
+        </div>
+        <div class="stat stat--flag" data-reveal style="--d: 70ms">
+          <span class="stat__value"><span data-count="750">750</span> <em>MT</em></span>
+          <span class="stat__label">Per month, 2026 capacity</span>
+        </div>
+        <div class="stat" data-reveal style="--d: 140ms">
+          <span class="stat__value"><span data-count="10000">10,000</span></span>
+          <span class="stat__label">Sq ft dedicated R&amp;D centre</span>
+        </div>
+        <div class="stat" data-reveal style="--d: 210ms">
+          <span class="stat__value"><span data-count="2">2</span></span>
+          <span class="stat__label">Patented products, one more filing</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ JOURNEY (pinned timeline) ============ -->
+  <section class="jpin" aria-label="Company timeline">
+    <div class="jpin__stick">
+      <div class="container">
+        <div class="section-head section-head--sub section-head--ondark">
+          <h2 class="section-head__title">Twenty-five years in innovation<span class="dot">.</span></h2>
+        </div>
+      </div>
+      <ol class="jpin__track">
+        <li class="jms" style="--rule: var(--spec-1)"><span class="jms__year">2000</span><p>Proprietorship founded. General industrial paints.</p></li>
+        <li class="jms" style="--rule: var(--spec-2)"><span class="jms__year">2003</span><p>1K lacquer coatings for glass bottles.</p></li>
+        <li class="jms" style="--rule: var(--spec-3)"><span class="jms__year">2006</span><p>New 10,000 sq ft production facility.</p></li>
+        <li class="jms" style="--rule: var(--spec-4)"><span class="jms__year">2007</span><p>Restructured as a Private Limited company.</p></li>
+        <li class="jms" style="--rule: var(--spec-5)"><span class="jms__year">2008</span><p>First export shipment to the Middle East.</p></li>
+        <li class="jms" style="--rule: var(--spec-6)"><span class="jms__year">2010</span><p>UV-cured lacquers for vacuum metallising.</p></li>
+        <li class="jms" style="--rule: var(--spec-7)"><span class="jms__year">2014</span><p>New production facility. 175 MT per month.</p></li>
+        <li class="jms" style="--rule: var(--spec-1)"><span class="jms__year">2015</span><p>Regional office established in Dubai.</p></li>
+        <li class="jms" style="--rule: var(--spec-2)"><span class="jms__year">2016</span><p>Original plant becomes a dedicated R&amp;D centre.</p></li>
+        <li class="jms" style="--rule: var(--spec-3)"><span class="jms__year">2018</span><p>Capacity expanded to 250 MT per month.</p></li>
+        <li class="jms" style="--rule: var(--spec-4)"><span class="jms__year">2022</span><p>Water-thinnable coatings for glass containers.</p></li>
+        <li class="jms" style="--rule: var(--spec-5)"><span class="jms__year">2023</span><p>METACOAT metal coating line launched.</p></li>
+        <li class="jms" style="--rule: var(--spec-6)"><span class="jms__year">2026</span><p>Customer Experience Centre. 750 MT per month.</p></li>
+      </ol>
+      <div class="jpin__meta" aria-hidden="true">
+        <span>2000 &#8594; 2026</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WHY COLORTEK ============ -->
+  <section class="section" aria-label="Why manufacturers choose Colortek">
+    <div class="container">
+      <div class="section-head section-head--sub" data-reveal>
+        <h2 class="section-head__title">Why global manufacturers choose Colortek<span class="dot">.</span></h2>
+      </div>
+
+      <div class="why">
+        <article class="why__cell" style="--tag: var(--spec-1)" data-reveal>
+          <span class="why__icon" aria-hidden="true"><svg class="why__glyph" width="26" height="26" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M216,96A88,88,0,1,0,72,163.83V240a8,8,0,0,0,11.58,7.16L128,225l44.43,22.21A8.07,8.07,0,0,0,176,248a8,8,0,0,0,8-8V163.83A87.85,87.85,0,0,0,216,96ZM56,96a72,72,0,1,1,72,72A72.08,72.08,0,0,1,56,96ZM168,227.06l-36.43-18.21a8,8,0,0,0-7.16,0L88,227.06V174.37a87.89,87.89,0,0,0,80,0ZM128,152A56,56,0,1,0,72,96,56.06,56.06,0,0,0,128,152Zm0-96A40,40,0,1,1,88,96,40,40,0,0,1,128,56Z"/></svg></span>
+          <h3>25+ years</h3>
+          <p>Coating expertise built continuously since 2000.</p>
+          <ul><li>Proven across market cycles</li><li>In-house expertise retained</li></ul>
+        </article>
+        <article class="why__cell" style="--tag: var(--spec-2); --d: 60ms" data-reveal>
+          <span class="why__icon" aria-hidden="true"><svg class="why__glyph" width="26" height="26" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M221.69,199.77,160,96.92V40h8a8,8,0,0,0,0-16H88a8,8,0,0,0,0,16h8V96.92L34.31,199.77A16,16,0,0,0,48,224H208a16,16,0,0,0,13.72-24.23ZM110.86,103.25A7.93,7.93,0,0,0,112,99.14V40h32V99.14a7.93,7.93,0,0,0,1.14,4.11L183.36,167c-12,2.37-29.07,1.37-51.75-10.11-15.91-8.05-31.05-12.32-45.22-12.81ZM48,208l28.54-47.58c14.25-1.74,30.31,1.85,47.82,10.72,19,9.61,35,12.88,48,12.88a69.89,69.89,0,0,0,19.55-2.7L208,208Z"/></svg></span>
+          <h3>Custom formulation</h3>
+          <p>Chemistry engineered to your substrate, line and spec.</p>
+          <ul><li>Matched to substrate and line speed</li><li>Fast colour and finish iteration</li></ul>
+        </article>
+        <article class="why__cell" style="--tag: var(--spec-3); --d: 120ms" data-reveal>
+          <span class="why__icon" aria-hidden="true"><svg class="why__glyph" width="26" height="26" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M225.86,102.82c-3.77-3.94-7.67-8-9.14-11.57-1.36-3.27-1.44-8.69-1.52-13.94-.15-9.76-.31-20.82-8-28.51s-18.75-7.85-28.51-8c-5.25-.08-10.67-.16-13.94-1.52-3.56-1.47-7.63-5.37-11.57-9.14C146.28,23.51,138.44,16,128,16s-18.27,7.51-25.18,14.14c-3.94,3.77-8,7.67-11.57,9.14C88,40.64,82.56,40.72,77.31,40.8c-9.76.15-20.82.31-28.51,8S41,67.55,40.8,77.31c-.08,5.25-.16,10.67-1.52,13.94-1.47,3.56-5.37,7.63-9.14,11.57C23.51,109.72,16,117.56,16,128s7.51,18.27,14.14,25.18c3.77,3.94,7.67,8,9.14,11.57,1.36,3.27,1.44,8.69,1.52,13.94.15,9.76.31,20.82,8,28.51s18.75,7.85,28.51,8c5.25.08,10.67.16,13.94,1.52,3.56,1.47,7.63,5.37,11.57,9.14C109.72,232.49,117.56,240,128,240s18.27-7.51,25.18-14.14c3.94-3.77,8-7.67,11.57-9.14,3.27-1.36,8.69-1.44,13.94-1.52,9.76-.15,20.82-.31,28.51-8s7.85-18.75,8-28.51c.08-5.25.16-10.67,1.52-13.94,1.47-3.56,5.37-7.63,9.14-11.57C232.49,146.28,240,138.44,240,128S232.49,109.73,225.86,102.82Zm-11.55,39.29c-4.79,5-9.75,10.17-12.38,16.52-2.52,6.1-2.63,13.07-2.73,19.82-.1,7-.21,14.33-3.32,17.43s-10.39,3.22-17.43,3.32c-6.75.1-13.72.21-19.82,2.73-6.35,2.63-11.52,7.59-16.52,12.38S132,224,128,224s-9.15-4.92-14.11-9.69-10.17-9.75-16.52-12.38c-6.1-2.52-13.07-2.63-19.82-2.73-7-.1-14.33-.21-17.43-3.32s-3.22-10.39-3.32-17.43c-.1-6.75-.21-13.72-2.73-19.82-2.63-6.35-7.59-11.52-12.38-16.52S32,132,32,128s4.92-9.15,9.69-14.11,9.75-10.17,12.38-16.52c2.52-6.1,2.63-13.07,2.73-19.82.1-7,.21-14.33,3.32-17.43S70.51,56.9,77.55,56.8c6.75-.1,13.72-.21,19.82-2.73,6.35-2.63,11.52-7.59,16.52-12.38S124,32,128,32s9.15,4.92,14.11,9.69,10.17,9.75,16.52,12.38c6.1,2.52,13.07,2.63,19.82,2.73,7,.1,14.33.21,17.43,3.32s3.22,10.39,3.32,17.43c.1,6.75.21,13.72,2.73,19.82,2.63,6.35,7.59,11.52,12.38,16.52S224,124,224,128,219.08,137.15,214.31,142.11ZM173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34Z"/></svg></span>
+          <h3>Global compliance</h3>
+          <p>Formulated and tested to international standards.</p>
+          <ul><li>ISO and regional standards</li><li>Full traceability and documentation</li></ul>
+        </article>
+        <article class="why__cell" style="--tag: var(--spec-4); --d: 180ms" data-reveal>
+          <span class="why__icon" aria-hidden="true"><svg class="why__glyph" width="26" height="26" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M215.79,118.17a8,8,0,0,0-5-5.66L153.18,90.9l14.66-73.33a8,8,0,0,0-13.69-7l-112,120a8,8,0,0,0,3,13l57.63,21.61L88.16,238.43a8,8,0,0,0,13.69,7l112-120A8,8,0,0,0,215.79,118.17ZM109.37,214l10.47-52.38a8,8,0,0,0-5-9.06L62,132.71l84.62-90.66L136.16,94.43a8,8,0,0,0,5,9.06l52.8,19.8Z"/></svg></span>
+          <h3>Fast development</h3>
+          <p>Rapid sampling, approval and scale-up cycles.</p>
+          <ul><li>Samples in days, not weeks</li><li>Smooth lab-to-line scale-up</li></ul>
+        </article>
+        <article class="why__cell" style="--tag: var(--spec-5); --d: 240ms" data-reveal>
+          <span class="why__icon" aria-hidden="true"><svg class="why__glyph" width="26" height="26" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M237.66,86.34l-60-60a8,8,0,0,0-11.32,0L37.11,155.57a44.77,44.77,0,0,0,63.32,63.32L212.32,107l22.21-7.4a8,8,0,0,0,3.13-13.25ZM89.11,207.57a28.77,28.77,0,0,1-40.68-40.68l28.8-28.8c8.47-2.9,21.75-4,39.07,5,10.6,5.54,20.18,8,28.56,8.73ZM205.47,92.41a8,8,0,0,0-3.13,1.93l-39.57,39.57c-8.47,2.9-21.75,4-39.07-5-10.6-5.54-20.18-8-28.56-8.73L172,43.31,217.19,88.5Z"/></svg></span>
+          <h3>Dedicated R&amp;D</h3>
+          <p>A 10,000 sq ft centre focused on next-generation coatings.</p>
+          <ul><li>Sustainable chemistries in development</li><li>Dedicated technical support</li></ul>
+        </article>
+        <article class="why__cell" style="--tag: var(--spec-6); --d: 300ms" data-reveal>
+          <span class="why__icon" aria-hidden="true"><svg class="why__glyph" width="26" height="26" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M221.87,83.16A104.1,104.1,0,1,1,195.67,49l22.67-22.68a8,8,0,0,1,11.32,11.32l-96,96a8,8,0,0,1-11.32-11.32l27.72-27.72a40,40,0,1,0,17.87,31.09,8,8,0,1,1,16-.9,56,56,0,1,1-22.38-41.65L184.3,60.39a87.88,87.88,0,1,0,23.13,29.67,8,8,0,0,1,14.44-6.9Z"/></svg></span>
+          <h3>Consistent quality</h3>
+          <p>Batch-to-batch reliability on every order.</p>
+          <ul><li>Tight batch-to-batch tolerances</li><li>QC at every production stage</li></ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ R&D ============ -->
+  <section class="section" aria-label="Research and development">
+    <div class="container">
+      <div class="story story--flip">
+        <figure class="story__media" data-reveal>
+          <img src="/assets/images/about/rd-lab-chemist.jpg" width="1600" height="1059"
+               loading="lazy" decoding="async"
+               alt="Chemist running a titration at the bench in the Colortek R&amp;D laboratory">
+          <figcaption>The R&amp;D centre in Dombivli, where every system starts.</figcaption>
+        </figure>
+        <div class="story__copy" data-reveal style="--d: 90ms">
+          <h2 class="story__title">Engineered in-house<span class="dot">.</span></h2>
+          <p>
+            A 10,000 sq ft research centre formulates every system to the
+            customer's substrate, line speed and finish, and an 8,000 sq ft
+            Excellence Centre is on the way. Because key raw materials are
+            produced internally, chemistry changes in days, not quarters.
+          </p>
+          <div class="tags tags--tight" style="--tag: var(--ink)">
+            <span class="tag">2 patented products</span>
+            <span class="tag">Patent filing underway</span>
+            <span class="tag">Trade secrets held in-house</span>
+            <span class="tag">Eco-conscious lines in active R&amp;D</span>
+          </div>
+          <p class="story__cta">
+            <a class="btn btn--outline" href="/products/">Explore our coatings <span class="arrow" aria-hidden="true">&#8594;</span></a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CTA ============ -->
+  <section class="section cta-final" aria-label="Visit us">
+    <div class="container">
+      <h2 class="cta-final__title" data-reveal>See the finishes in person<span class="dot">.</span></h2>
+      <p class="cta-final__lead" data-reveal>The plant and Experience Centre are in Dombivli; the regional office is in Dubai. Both doors open with one message.</p>
+      <div class="cta-final__actions" data-reveal>
+        <a class="btn btn--ink" href="/contact/">Talk to us <span class="arrow" aria-hidden="true">&#8594;</span></a>
+        <a class="cta-final__alt" href="https://wa.me/919819362380?text=Hi%20Colortek%2C%20I%27d%20like%20to%20visit%20the%20plant." target="_blank" rel="noopener">WhatsApp us</a>
+        <a class="cta-final__alt" href="tel:+919819362380">Call +91 98193 62380</a>
+      </div>
+    </div>
+  </section>
+
+</Base>

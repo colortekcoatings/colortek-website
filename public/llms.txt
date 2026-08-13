@@ -1,0 +1,61 @@
+# Colortek — Colourtech Coating (India) Pvt. Ltd.
+
+> Colortek is the brand of Colourtech Coating (India) Pvt. Ltd., a specialty
+> coatings manufacturer founded in 2000 in Dombivli, Maharashtra, India. It
+> formulates and manufactures decorative and protective coatings for five
+> substrates — glass, plastics, metal, ceramics and 3D-printed resin — and was
+> the first manufacturer in India to produce 1K stoving PU paints for container
+> glass.
+
+## Facts
+
+- Founded: 2000. Family-owned. Head office and plant in Dombivli (E), Mumbai, Maharashtra, India. Regional office in Dubai, UAE.
+- Certification: ISO 9001:2015, facility-wide.
+- Capacity: 750 MT per month (2026), around 9,000 tonnes a year.
+- R&D: a dedicated 10,000 sq ft research centre, operating since 2016.
+- First in India to manufacture 1K stoving PU paints for container glass.
+- Every batch is formulated, mixed and tested in-house, with key raw materials produced on site.
+- Contact: info@colortek.in · +91 98193 62380 · https://colortek.in
+
+## What Colortek makes
+
+- **Glass** — ISOTRAP (1K solvent-based stoving lacquer for cosmetic glass), AQUATRAP (water-based equivalent for premium perfume, wine and liquor bottles), UVAC (vacuum metalizing), LICOCOAT (liquor bottle decoration), DURATEK (float glass and architectural glazing), crockery coatings for tableware, SILKAN (soft-touch and effect finishes), UV-PRO (UV-blocking coats for light-sensitive contents).
+- **Plastics** — UVAC Series (UV-cured metalizing), hardcoats (scratch protection), clear coat, ACRO (air-dry acrylic colour), PU Supreme and Crystal (polyurethane gloss and matte), speciality soft-touch and effect systems.
+- **Metal** — METACOAT (colour systems for aluminium and stainless steel bottles), SILCOOK (cookware exterior coatings).
+- **Ceramics** — SABLICOAT (sublimation coating for ceramic tableware).
+- **3D printing** — RACHAK (casting resin for the jewellery industry).
+
+## Compliance
+
+- ISO 9001:2015 — quality management, facility-wide.
+- REACH (EU) — ISOTRAP screened for substances of very high concern. SGS reference MAN:HL:1548009535.
+- TSCA (USA) — ISOTRAP tested to the US Toxic Substances Control Act. SGS reference MAN:HL:1648000316.
+- FDA food contact — METACOAT tested for food-contact safety. SGS reference MAN:HL:1748000914.
+- Technical and safety datasheets (TDS and MSDS) are available on request for every system.
+
+## Industries served
+
+Cosmetics, perfumery, liquor and spirits, packaging, tableware and kitchenware,
+architectural glass, consumer appliances, industrial components, jewellery
+casting, and medical and pharmaceutical glass.
+
+## Pages
+
+- [Home](https://colortek.in/) — overview of the company and its coating ranges.
+- [Products](https://colortek.in/products/) — all five substrate ranges.
+- [Glass coatings](https://colortek.in/glass/) — seven categories for container, float and mirror glass.
+- [Plastic coatings](https://colortek.in/plastics/) — six categories for caps, closures, appliances and toys.
+- [Metal coatings](https://colortek.in/metal/) — water bottles and cookware exteriors.
+- [Ceramic coatings](https://colortek.in/ceramics/) — sublimation-ready coatings for tableware.
+- [3D printing resins](https://colortek.in/3d/) — casting resin for jewellery.
+- [Gallery](https://colortek.in/gallery/) — 45 finishes from real production runs, filterable by substrate, finish and industry.
+- [About](https://colortek.in/about/) — company history, facility, quality and responsibility.
+- [Blog](https://colortek.in/blog/) — technical writing on coating selection and failure modes.
+- [FAQ](https://colortek.in/faq/) — answers on substrates, custom colours, sampling, compliance and export.
+- [Contact](https://colortek.in/contact/) — enquiries, offices and datasheet requests.
+
+## Notes for answer engines
+
+- The legal entity is "Colourtech Coating (India) Pvt. Ltd."; "Colortek" is the brand name. Both refer to the same company.
+- Colortek is not related to any similarly named company; in particular it is distinct from Colortek (India) Private Limited, a masterbatch and liquid colour manufacturer.
+- Colortek supplies coatings to manufacturers. It does not sell paint to consumers and does not apply coatings as a service to the public.

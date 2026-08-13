@@ -1,0 +1,56 @@
+---
+import Base from '../../layouts/Base.astro';
+import { sanityClient } from 'sanity:client';
+import { responsive, altOf } from '../../lib/image.js';
+
+// Newest first. A new article added in the admin panel appears here, in the
+// sitemap, and on the home page automatically.
+const posts = await sanityClient.fetch(`*[_type == "blogPost"]|order(publishedAt desc){
+  title, slug, excerpt, publishedAt, topic, topicColour, coverImage
+}`);
+---
+
+<Base
+  title={"Blog | Coating Insights from Colortek"}
+  description={"Practical writing on coatings from the Colortek plant: glass adhesion, 1K vs 2K systems, water-based coatings and buyer guides."}
+ 
+>
+
+  <section class="page-hero">
+    <div class="page-hero__inner">
+      <h1 class="hero__title hero__title--md">Notes from the plant<span class="dot">.</span></h1>
+      <p class="hero__sub">
+        Practical writing on coatings: what sticks, what survives,
+        and what actually works on a production line.
+      </p>
+    </div>
+  </section>
+
+  <section class="section" aria-label="Articles">
+    <div class="container">
+      <div class="posts">
+        {posts.map((post) => {
+          const img = responsive(post.coverImage, { widths: [500, 1000] });
+          const date = post.publishedAt
+            ? new Date(post.publishedAt + 'T00:00:00').toLocaleDateString('en-GB',
+                { day: 'numeric', month: 'long', year: 'numeric' })
+            : '';
+          return (
+            <a class="post-card" href={`/blog/${post.slug.current}/`}
+               style={`--tag: var(--${post.topicColour || 'spec-1'})`} data-reveal>
+              <div class="post-card__media">
+                <img src={img?.src} srcset={img?.srcset} sizes="(max-width: 900px) 100vw, 380px"
+                     loading="lazy" decoding="async" alt={altOf(post.coverImage)} />
+                {post.topic && <span class="post-card__chip">{post.topic}</span>}
+              </div>
+              <h2 class="post-card__title">{post.title}</h2>
+              <p class="post-card__excerpt">{post.excerpt}</p>
+              <p class="post-card__foot"><span>{date}</span><span class="arrow" aria-hidden="true">&#8594;</span></p>
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+</Base>

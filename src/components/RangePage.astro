@@ -1,0 +1,250 @@
+---
+/**
+ * Renders any of the five substrate pages from Sanity.
+ *
+ * Handles both shapes: a tab strip (Glass 7, Plastics 6, Metal 2) and the
+ * single-system pages (Ceramics, 3D) which have no tabs at all. The tab
+ * behaviour itself — switching panels, deep links like /glass/#liquor — is
+ * the existing main.js, untouched; this only has to emit the markup it
+ * expects.
+ */
+import Base from '../layouts/Base.astro';
+import Icon from './Icon.astro';
+import { responsive, altOf } from '../lib/image.js';
+
+const { page } = Astro.props;
+
+const sectors = page?.sectors || [];
+const hasTabs = sectors.length > 0;
+const standalone = page?.standaloneProducts || [];
+const cert = page?.complianceBlock;
+
+const heroArt = responsive(page?.heroImage, { widths: [900, 1800] });
+const waHref = `https://wa.me/919819362380?text=${encodeURIComponent(page?.cta?.whatsappText || '')}`;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Products', item: 'https://colortek.in/products/' },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: `${page?.title} coatings`,
+      item: `https://colortek.in/${page?.slug?.current}/`,
+    },
+  ],
+};
+---
+
+<Base title={page?.seo?.title} description={page?.seo?.description} jsonLd={jsonLd}>
+
+  <!-- ============ PAGE HERO ============ -->
+  <section class="page-hero page-hero--left range-hero">
+    <div class="container range-hero__grid">
+      <div>
+        <p class="crumb"><a href="/products/">Products</a> <span aria-hidden="true">/</span> {page?.title}</p>
+        <h1 class="hero__title">{page?.title}<span class="dot">.</span></h1>
+        <p class="hero__sub">{page?.intro}</p>
+      </div>
+      {heroArt && (
+        <img class="range-hero__art" src={heroArt.src} srcset={heroArt.srcset}
+             sizes="(max-width: 900px) 60vw, 40vw" alt="" aria-hidden="true" />
+      )}
+    </div>
+  </section>
+
+  {hasTabs && (
+    <!-- ============ APPLICATION SECTORS (tabs) ============ -->
+    <section class="section section--flush" aria-label={`${page?.title} coating categories`}>
+      <div class="container">
+        <p class="sectors__label" data-reveal>Application sectors</p>
+        <div class="sectors" role="tablist" aria-label={`${page?.title} coating categories`} data-reveal>
+          {sectors.map((sector, i) => (
+            <button
+              class={`sector${i === 0 ? ' is-active' : ''}`}
+              role="tab"
+              id={`tab-${sector.anchor?.current}`}
+              aria-controls={`panel-${sector.anchor?.current}`}
+              aria-selected={i === 0 ? 'true' : 'false'}
+              tabindex={i === 0 ? undefined : -1}
+            >
+              <Icon name={sector.icon} class="sector__glyph" />
+              <span>{sector.label}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- ============ CATEGORY PANELS ============ -->
+  <div class="container catpanels">
+    {hasTabs
+      ? sectors.map((sector, i) => (
+          <section
+            class="catpanel"
+            id={`panel-${sector.anchor?.current}`}
+            role="tabpanel"
+            aria-labelledby={`tab-${sector.anchor?.current}`}
+            hidden={i === 0 ? undefined : true}
+          >
+            {(sector.products || []).map((system, j) => (
+              <Fragment>
+                <div class={`catpanel__grid${j % 2 ? ' catpanel__grid--flip' : ''}`}>
+                  {system.image && (() => {
+                    const img = responsive(system.image, { widths: [700, 1200] });
+                    return (
+                      <figure class="pmedia">
+                        <img src={img?.src} srcset={img?.srcset} sizes="(max-width: 900px) 100vw, 45vw"
+                             loading="lazy" decoding="async" alt={altOf(system.image)} />
+                        {(system.image.captionKicker || system.image.caption) && (
+                          <figcaption class="pmedia__cap">
+                            <span>{system.image.captionKicker}</span>
+                            <strong>{system.image.caption}</strong>
+                          </figcaption>
+                        )}
+                      </figure>
+                    );
+                  })()}
+                  <div class="catpanel__body">
+                    <h2 class="catpanel__title">{system.name}<span class="catpanel__sub">{system.tagline}</span></h2>
+                    <p class="catpanel__text">{system.body}</p>
+                    {system.features?.length > 0 && (
+                      <ul class="featrows">
+                        {system.features.map((f) => (
+                          <li><strong>{f.title}</strong><span>{f.detail}</span></li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                </div>
+                {system.glance?.length > 0 && (
+                  <div class="glance">
+                    {system.glance.map((g) => (
+                      <div class="glance__tile"><span>{g.label}</span><strong>{g.value}</strong></div>
+                    ))}
+                  </div>
+                )}
+              </Fragment>
+            ))}
+
+            {sector.compliance && cert && (
+              <div class="catpanel__compliance">
+                <div class="section-head section-head--sub">
+                  <h2 class="section-head__title">{cert.title}<span class="dot">.</span></h2>
+                  <p class="section-head__lead">{cert.lead}</p>
+                </div>
+                <div class="cert-plate">
+                  <div class={`cert-plate__grid${cert.credentials?.length === 2 ? ' cert-plate__grid--two' : ''}`}>
+                    {(cert.credentials || []).map((c) => (
+                      <div class="cred cred--iconed">
+                        <span class="cred__icon" aria-hidden="true"><Icon name="shield-check" class="cred__glyph" /></span>
+                        <strong>{c.name}</strong>
+                        <span>{c.detail}</span>
+                        <em>{c.reference}</em>
+                      </div>
+                    ))}
+                  </div>
+                  <p class="cert-plate__foot">
+                    {cert.footNote}
+                    <a href="/contact/">{cert.footLinkLabel} <span class="arrow" aria-hidden="true">&#8594;</span></a>
+                  </p>
+                </div>
+              </div>
+            )}
+          </section>
+        ))
+      : (
+          <section class="catpanel">
+            {standalone.map((system, j) => (
+              <Fragment>
+                <div class={`catpanel__grid${j % 2 ? ' catpanel__grid--flip' : ''}`}>
+                  {system.image && (() => {
+                    const img = responsive(system.image, { widths: [700, 1200] });
+                    return (
+                      <figure class="pmedia">
+                        <img src={img?.src} srcset={img?.srcset} sizes="(max-width: 900px) 100vw, 45vw"
+                             loading="lazy" decoding="async" alt={altOf(system.image)} />
+                        {(system.image.captionKicker || system.image.caption) && (
+                          <figcaption class="pmedia__cap">
+                            <span>{system.image.captionKicker}</span>
+                            <strong>{system.image.caption}</strong>
+                          </figcaption>
+                        )}
+                      </figure>
+                    );
+                  })()}
+                  <div class="catpanel__body">
+                    <h2 class="catpanel__title">{system.name}<span class="catpanel__sub">{system.tagline}</span></h2>
+                    <p class="catpanel__text">{system.body}</p>
+                    {system.features?.length > 0 && (
+                      <ul class="featrows">
+                        {system.features.map((f) => (
+                          <li><strong>{f.title}</strong><span>{f.detail}</span></li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                </div>
+                {system.glance?.length > 0 && (
+                  <div class="glance">
+                    {system.glance.map((g) => (
+                      <div class="glance__tile"><span>{g.label}</span><strong>{g.value}</strong></div>
+                    ))}
+                  </div>
+                )}
+              </Fragment>
+            ))}
+          </section>
+        )}
+  </div>
+
+  <!-- ============ GALLERY ============ -->
+  {page?.gallery?.images?.length > 0 && (
+    <section class="section" aria-label={`${page?.title} coating gallery`}>
+      <div class="container">
+        <div class="section-head section-head--sub section-head--split" data-reveal>
+          <div>
+            <h2 class="section-head__title">{page.gallery.title}<span class="dot">.</span></h2>
+            <p class="section-head__lead">{page.gallery.lead}</p>
+          </div>
+          <a class="btn btn--outline" href="/gallery/">View full gallery <span class="arrow" aria-hidden="true">&#8594;</span></a>
+        </div>
+      </div>
+      <div class="industry-marquee" data-reveal aria-label={`Gallery of Colortek ${page?.title?.toLowerCase()} finishes`}>
+        <div class="industry-marquee__track">
+          {[false, true].map((isDuplicate) => (
+            <div class="industry-marquee__group" aria-hidden={isDuplicate ? 'true' : undefined}>
+              {page.gallery.images.map((image) => {
+                const img = responsive(image, { widths: [232, 464] });
+                return (
+                  <figure>
+                    <div class="thumb">
+                      <img src={img?.src} srcset={img?.srcset} sizes="232px"
+                           loading="lazy" decoding="async" alt={altOf(image)} />
+                    </div>
+                  </figure>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- ============ CTA ============ -->
+  <section class="section cta-final" aria-label="Start a project">
+    <div class="container">
+      <h2 class="cta-final__title" data-reveal>{page?.cta?.title}<span class="dot">.</span></h2>
+      <p class="cta-final__lead" data-reveal>{page?.cta?.lead}</p>
+      <div class="cta-final__actions" data-reveal>
+        <a class="btn btn--ink" href="/contact/">Talk to us <span class="arrow" aria-hidden="true">&#8594;</span></a>
+        <a class="cta-final__alt" href={waHref} target="_blank" rel="noopener">WhatsApp us</a>
+        <a class="cta-final__alt" href="tel:+919819362380">Call +91 98193 62380</a>
+      </div>
+    </div>
+  </section>
+
+</Base>

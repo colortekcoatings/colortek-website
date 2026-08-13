@@ -1,0 +1,13 @@
+# colortek.in
+#
+# Everything is open to crawlers except the admin panel, which holds no public
+# content and should never appear in search results.
+
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /admin-panel
+Disallow: /thanks/
+
+Sitemap: https://colortek.in/sitemap-index.xml

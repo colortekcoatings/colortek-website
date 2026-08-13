@@ -1,0 +1,198 @@
+---
+import Base from '../layouts/Base.astro';
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Colourtech Coating (India) Pvt. Ltd.",
+  "alternateName": "Colortek",
+  "url": "https://colortek.in/",
+  "email": "info@colortek.in",
+  "telephone": "+91-9819362380",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "B-37, MIDC Phase I, Kalyan Road, Golavali, Shilphata, Near Vinod Dyeing",
+    "addressLocality": "Dombivli (E)",
+    "addressRegion": "Maharashtra",
+    "postalCode": "421203",
+    "addressCountry": "IN"
+  },
+  "location": [
+    {
+      "@type": "Place",
+      "name": "Colortek Head Office & Plant",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Dombivli (E), Mumbai",
+        "addressRegion": "Maharashtra",
+        "addressCountry": "IN"
+      }
+    },
+    {
+      "@type": "Place",
+      "name": "Colortek Regional Office",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Dubai",
+        "addressCountry": "AE"
+      }
+    }
+  ]
+};
+---
+
+<Base
+  title={"Contact | Colortek"}
+  description={"Talk to Colortek about specialty coatings. Head office and plant in Mumbai, regional office in Dubai. Call +91 98193 62380 or write to info@colortek.in."}
+  ogImage="/assets/images/hero/isotrap-gold-bottles-dark.jpg" jsonLd={jsonLd}
+>
+
+  <!-- ============ PAGE HERO ============ -->
+  <section class="page-hero">
+    <div class="page-hero__inner">
+      <h1 class="hero__title">Talk to us<span class="dot">.</span></h1>
+      <p class="hero__sub">
+        Send the brief, request datasheets, or call us directly.
+        Substrate, finish and volume is all we need to start.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ CHANNELS ============ -->
+  <section class="section section--flush" aria-label="Contact channels">
+    <div class="container">
+      <div class="channels">
+        <!-- The icons carry the card on a phone, where the three stacked cards
+             cost more scroll than they are worth; hidden from 561px up. -->
+        <a class="channel" href="tel:+919819362380" data-reveal>
+          <span class="channel__icon" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 256 256" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M222.37,158.46l-47.11-21.11-.13-.06a16,16,0,0,0-15.17,1.4,8.12,8.12,0,0,0-.75.56L134.87,160c-15.42-7.49-31.34-23.29-38.83-38.51l20.78-24.71c.19-.23.37-.46.54-.7a16,16,0,0,0,1.32-15.06l0-.12L97.54,33.64a16,16,0,0,0-16.62-9.52A56.26,56.26,0,0,0,32,80c0,79.4,64.6,144,144,144a56.26,56.26,0,0,0,55.88-48.92A16,16,0,0,0,222.37,158.46ZM176,208A128.14,128.14,0,0,1,48,80,40.2,40.2,0,0,1,82.87,40a.61.61,0,0,0,0,.12l21,47L83.2,111.86a6.13,6.13,0,0,0-.57.71,16,16,0,0,0-1,15.7c9.06,18.53,27.73,37.06,46.46,46.11a16,16,0,0,0,15.75-1.14,8.44,8.44,0,0,0,.69-.56L168.89,152l47,21.05h0s.08,0,.11,0A40.21,40.21,0,0,1,176,208Z"/></svg></span>
+          <span class="channel__label">Call</span>
+          <span class="channel__value">+91 98193 62380</span>
+          <span class="channel__hint">Monday to Saturday, 9:30 to 18:30 IST <span class="arrow" aria-hidden="true">&#8594;</span></span>
+        </a>
+        <a class="channel" href="https://wa.me/919819362380?text=Hi%20Colortek%2C%20I%27d%20like%20to%20discuss%20a%20coating%20requirement."
+           target="_blank" rel="noopener" data-reveal style="--d: 70ms">
+          <span class="channel__icon" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg></span>
+          <span class="channel__label">WhatsApp</span>
+          <span class="channel__value">Chat with us</span>
+          <span class="channel__hint">Fastest for photos of your part <span class="arrow" aria-hidden="true">&#8594;</span></span>
+        </a>
+        <a class="channel" href="mailto:info@colortek.in" data-reveal style="--d: 140ms">
+          <span class="channel__icon" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 256 256" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48ZM203.43,64,128,133.15,52.57,64ZM216,192H40V74.19l82.59,75.71a8,8,0,0,0,10.82,0L216,74.19V192Z"/></svg></span>
+          <span class="channel__label">Email</span>
+          <span class="channel__value">info@colortek.in</span>
+          <span class="channel__hint">Best for briefs and datasheet requests <span class="arrow" aria-hidden="true">&#8594;</span></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FORM + OFFICES ============ -->
+  <section class="section" aria-label="Send an enquiry">
+    <div class="container">
+      <div class="contact-grid">
+
+        <div class="contact-grid__form" data-reveal>
+          <h2 class="contact-h2">Send an enquiry<span class="dot">.</span></h2>
+
+          <!--
+            Netlify Forms. Submissions are stored in the Netlify dashboard and
+            emailed on arrival — searchable and exportable, rather than living
+            only in one inbox where a deleted message is a lost enquiry.
+
+            netlify-honeypot names a decoy field: bots fill it in, humans never
+            see it, and anything with it filled is discarded silently. That
+            replaces the third-party FormSubmit service, which needed an email
+            activation step before it would work at all.
+          -->
+          <form class="form" name="enquiry" method="POST" action="/thanks/"
+                data-netlify="true" netlify-honeypot="bot-field">
+            <input type="hidden" name="form-name" value="enquiry">
+            <p class="visually-hidden-label" hidden>
+              <label>Leave this empty: <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+            </p>
+
+            <div class="form__row">
+              <div class="field">
+                <label class="field__label" for="f-name">Name</label>
+                <input class="field__input" id="f-name" name="name" type="text" autocomplete="name" required>
+                <small class="field__error">Please add your name.</small>
+              </div>
+              <div class="field">
+                <label class="field__label" for="f-company">Company</label>
+                <input class="field__input" id="f-company" name="company" type="text" autocomplete="organization">
+              </div>
+            </div>
+
+            <div class="form__row">
+              <div class="field">
+                <label class="field__label" for="f-email">Email</label>
+                <input class="field__input" id="f-email" name="email" type="email" autocomplete="email" required>
+                <small class="field__error">Please add a valid email address.</small>
+              </div>
+              <div class="field">
+                <label class="field__label" for="f-phone">Phone</label>
+                <input class="field__input" id="f-phone" name="phone" type="tel" autocomplete="tel">
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="field__label" for="f-substrate">Substrate</label>
+              <select class="field__input" id="f-substrate" name="substrate">
+                <option value="" selected>Choose one</option>
+                <option>Glass</option>
+                <option>Plastics</option>
+                <option>Metal</option>
+                <option>Ceramics</option>
+                <option>3D printing resin</option>
+                <option>Not sure yet</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label class="field__label" for="f-message">Your brief</label>
+              <textarea class="field__textarea" id="f-message" name="message" required
+                        placeholder="What are you coating, which finish, and roughly how many pieces?"></textarea>
+              <small class="field__error">Tell us a little about what you need coated.</small>
+            </div>
+
+            <button class="btn btn--ink" type="submit">Send enquiry <span class="arrow" aria-hidden="true">&#8594;</span></button>
+            <p class="form__note">We use your details only to answer this enquiry.</p>
+          </form>
+        </div>
+
+        <div class="contact-grid__offices">
+          <article class="office" data-reveal>
+            <p class="office__kicker" style="--tag: var(--spec-1)">Head office &amp; plant</p>
+            <h3 class="office__city">Mumbai, India</h3>
+            <p class="office__addr">
+              Colourtech Coating (India) Pvt. Ltd.<br>
+              B-37, MIDC Phase I, Kalyan Road,<br>
+              Golavali, Shilphata, Near Vinod Dyeing,<br>
+              Dombivli (E) 421 203, Maharashtra
+            </p>
+            <div class="office__links">
+              <a href="https://www.google.com/maps/search/?api=1&amp;query=Colourtech%20Coating%20India%20Pvt%20Ltd%20B-37%20MIDC%20Phase%20I%20Dombivli"
+                 target="_blank" rel="noopener">Get directions <span class="arrow" aria-hidden="true">&#8594;</span></a>
+              <a href="tel:+919819362380">+91 98193 62380</a>
+            </div>
+          </article>
+
+          <article class="office" data-reveal style="--d: 90ms">
+            <p class="office__kicker" style="--tag: var(--spec-6)">Regional office</p>
+            <h3 class="office__city">Dubai, UAE</h3>
+            <p class="office__addr">
+              Serving the Middle East, from enquiry<br>
+              to delivered material.
+            </p>
+            <div class="office__links">
+              <a href="mailto:info@colortek.in">info@colortek.in</a>
+              <a href="https://wa.me/919819362380" target="_blank" rel="noopener">WhatsApp <span class="arrow" aria-hidden="true">&#8594;</span></a>
+            </div>
+          </article>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</Base>

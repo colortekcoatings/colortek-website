@@ -1,0 +1,156 @@
+---
+/**
+ * One template for every blog article.
+ *
+ * Replaces the six hand-written files. The contents list and the share links
+ * are generated from the article itself rather than stored, so renaming a
+ * heading can never leave a contents entry pointing nowhere.
+ */
+import Base from '../../layouts/Base.astro';
+import { sanityClient } from 'sanity:client';
+import { responsive, altOf } from '../../lib/image.js';
+import { toHTML } from '@portabletext/to-html';
+import Icon from '../../components/Icon.astro';
+
+export async function getStaticPaths() {
+  const posts = await sanityClient.fetch(`*[_type == "blogPost" && defined(slug.current)]{
+    title, slug, excerpt, publishedAt, readingTime, topic, topicColour, byline,
+    coverImage, body, summary, railCta, seo
+  }`);
+  return posts.map((post) => ({ params: { slug: post.slug.current }, props: { post } }));
+}
+
+const { post } = Astro.props;
+
+/** "Pot life: the clock 2K starts" -> "pot-life-the-clock-2k-starts" */
+const anchorise = (text) =>
+  text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
+const plain = (block) => (block.children || []).map((c) => c.text).join('');
+
+// The contents list is every top-level heading, in order.
+const headings = (post.body || [])
+  .filter((b) => b._type === 'block' && b.style === 'h2')
+  .map((b) => ({ text: plain(b), id: anchorise(plain(b)) }));
+
+const bodyHtml = toHTML(post.body || [], {
+  components: {
+    block: {
+      // Headings carry the id the contents list links to.
+      h2: ({ children, value }) => `<h2 id="${anchorise((value.children || []).map((c) => c.text).join(''))}">${children}</h2>`,
+      h3: ({ children }) => `<h3>${children}</h3>`,
+      blockquote: ({ children }) => `<blockquote class="pullquote">${children}</blockquote>`,
+    },
+    marks: {
+      link: ({ children, value }) => `<a href="${value?.href || '#'}">${children}</a>`,
+    },
+  },
+});
+
+const url = `https://colortek.in/blog/${post.slug.current}/`;
+const enc = encodeURIComponent;
+const cover = responsive(post.coverImage, { widths: [900, 1600] });
+const dateText = post.publishedAt
+  ? new Date(post.publishedAt + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+  : '';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: post.title,
+  description: post.excerpt,
+  datePublished: post.publishedAt,
+  author: { '@type': 'Organization', name: post.byline || 'Colortek' },
+  publisher: {
+    '@type': 'Organization',
+    name: 'Colourtech Coating (India) Pvt. Ltd.',
+    url: 'https://colortek.in/',
+  },
+  mainEntityOfPage: url,
+};
+---
+
+<Base title={post.seo?.title} description={post.seo?.description} jsonLd={jsonLd}>
+
+  <section class="page-hero page-hero--left article-hero">
+    <div class="container">
+      <div class="ahero">
+        <div class="ahero__copy">
+          <p class="crumb"><a href="/blog/">Blog</a> <span aria-hidden="true">/</span> {post.topic}</p>
+          <p class="article__meta">
+            <span class="article__topic" style={`--tag: var(--${post.topicColour || 'spec-1'})`}>{post.topic}</span>
+            <span>{dateText}</span>
+            {post.readingTime && <span>{post.readingTime} min read</span>}
+            <span class="article__byline">{post.byline}</span>
+          </p>
+          <h1 class="article__title">{post.title}<span class="dot">.</span></h1>
+          <p class="article__lead">{post.excerpt}</p>
+        </div>
+        {cover && (
+          <figure class="ahero__media">
+            <img src={cover.src} srcset={cover.srcset} sizes="(max-width: 900px) 100vw, 50vw"
+                 loading="eager" fetchpriority="high" decoding="async" alt={altOf(post.coverImage)} />
+            {post.coverImage?.caption && <figcaption>{post.coverImage.caption}</figcaption>}
+          </figure>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="alayout">
+        <aside class="arail">
+          {headings.length > 0 && (
+            <nav class="toc" aria-label="On this page">
+              <p class="toc__label">On this page</p>
+              <ol class="toc__list">
+                {headings.map((h) => <li><a href={`#${h.id}`}>{h.text}</a></li>)}
+              </ol>
+            </nav>
+          )}
+
+          <div class="rail-share">
+            <span class="rail-share__label">Share</span>
+            <a class="sharei" title="Share on LinkedIn" aria-label="Share on LinkedIn"
+               href={`https://www.linkedin.com/sharing/share-offsite/?url=${enc(url)}`}
+               target="_blank" rel="noopener"><Icon name="linkedin" /></a>
+            <a class="sharei" title="Share on WhatsApp" aria-label="Share on WhatsApp"
+               href={`https://wa.me/?text=${enc(url)}`}
+               target="_blank" rel="noopener"><Icon name="whatsapp" /></a>
+            <a class="sharei" title="Share on X" aria-label="Share on X"
+               href={`https://twitter.com/intent/tweet?url=${enc(url)}&text=${enc(post.title)}`}
+               target="_blank" rel="noopener"><Icon name="x" /></a>
+            <button class="sharei sharei--copy" type="button" aria-label="Copy link" data-copy={url}>
+              <span class="sharei__glyph"><Icon name="link-simple-bold" /></span>
+              <span class="sharei__glyph sharei__glyph--done"><Icon name="check-bold" /></span>
+              <span class="sharei__flash" aria-hidden="true">Copied</span>
+            </button>
+          </div>
+
+          {post.railCta?.title && (
+            <div class="railcta">
+              <p class="railcta__title">{post.railCta.title}</p>
+              <a class="btn btn--ink" href="/contact/">Talk to us <span class="arrow" aria-hidden="true">&#8594;</span></a>
+              {post.railCta.linkLabel && (
+                <a class="railcta__alt" href={post.railCta.linkHref}>{post.railCta.linkLabel} <span class="arrow" aria-hidden="true">&#8594;</span></a>
+              )}
+            </div>
+          )}
+        </aside>
+
+        <article class="article">
+          <Fragment set:html={bodyHtml} />
+
+          {post.summary?.length > 0 && (
+            <aside>
+              <h2>In short</h2>
+              <ul>{post.summary.map((line) => <li>{line}</li>)}</ul>
+            </aside>
+          )}
+        </article>
+      </div>
+    </div>
+  </section>
+
+</Base>

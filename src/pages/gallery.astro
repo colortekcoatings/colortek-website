@@ -1,0 +1,161 @@
+---
+import Base from '../layouts/Base.astro';
+import { sanityClient } from 'sanity:client';
+import { responsive, altOf } from '../lib/image.js';
+
+const items = await sanityClient.fetch(`*[_type == "galleryItem"]|order(order asc){
+  title, system, substrate, finishes, industries, image
+}`);
+---
+
+<Base
+  title={"Gallery | Colortek Coating Finishes"}
+  description={"Browse Colortek coating finishes by substrate, finish and industry: metallic, glitter, crackle, soft touch, gradient, print and casting resin, on glass, plastics, metal, ceramics and 3D."}
+  ogImage="/assets/images/hero/isotrap-gold-bottles-dark.jpg"
+>
+
+  <section class="page-hero">
+    <div class="page-hero__inner">
+      <h1 class="hero__title hero__title--md">The gallery<span class="dot">.</span></h1>
+      <p class="hero__sub">
+        {items.length} finishes from real production runs. Filter by what you are
+        coating, how you want it to look, and the market it ships to.
+      </p>
+    </div>
+  </section>
+
+  <section class="section" aria-label="Gallery">
+    <div class="container">
+      <div class="cfilters" id="cat-filters">
+        <div class="cfilters__bar">
+          <div class="cfsearch">
+            <span class="cfsearch__icon" aria-hidden="true"><svg width="18" height="18" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"/></svg></span>
+            <label class="visually-hidden-label" for="cat-search">Search finishes</label>
+            <input id="cat-search" class="cfsearch__input" type="search" placeholder="Search a finish or system" autocomplete="off">
+          </div>
+
+          <button class="cfdrop__btn" type="button" data-facet="substrate"
+                  aria-expanded="false" aria-controls="panel-substrate">
+            <span class="cfdrop__label">Substrate</span>
+            <span class="cfdrop__caret" aria-hidden="true">&#9662;</span>
+          </button>
+          <button class="cfdrop__btn" type="button" data-facet="finish"
+                  aria-expanded="false" aria-controls="panel-finish">
+            <span class="cfdrop__label">Finish</span>
+            <span class="cfdrop__caret" aria-hidden="true">&#9662;</span>
+          </button>
+          <button class="cfdrop__btn" type="button" data-facet="industry"
+                  aria-expanded="false" aria-controls="panel-industry">
+            <span class="cfdrop__label">Industry</span>
+            <span class="cfdrop__caret" aria-hidden="true">&#9662;</span>
+          </button>
+
+          <button class="cfsheet__open" type="button" id="cat-sheet-open" aria-expanded="false">
+            Filters <span class="cfsheet__badge" id="cat-badge" hidden>0</span>
+          </button>
+
+          <button class="cfilters__clear" type="button" id="cat-clear" hidden>Clear</button>
+          <p class="cfilters__count" aria-live="polite"><strong id="cat-count">{items.length}</strong> finishes</p>
+        </div>
+
+        <div class="cfpanels" id="cat-panels">
+          <div class="cfsheet__head">
+            <p class="cfsheet__title">Filters</p>
+            <button class="cfsheet__done" type="button" data-close-sheet>Done</button>
+          </div>
+      <div class="cfdrop__panel" id="panel-substrate" data-panel="substrate" hidden>
+        <p class="cfdrop__title">Substrate</p>
+        <label class="cfopt"><input type="checkbox" data-facet="substrate" value="Glass"><span>Glass</span></label>
+        <label class="cfopt"><input type="checkbox" data-facet="substrate" value="Plastics"><span>Plastics</span></label>
+        <label class="cfopt"><input type="checkbox" data-facet="substrate" value="Metal"><span>Metal</span></label>
+        <label class="cfopt"><input type="checkbox" data-facet="substrate" value="Ceramics"><span>Ceramics</span></label>
+        <label class="cfopt"><input type="checkbox" data-facet="substrate" value="3D"><span>3D</span></label>
+      </div>
+      <div class="cfdrop__panel" id="panel-finish" data-panel="finish" hidden>
+        <p class="cfdrop__title">Finish</p>
+        <label class="cfopt"><input type="checkbox" data-facet="finish" value="Metallic"><span>Metallic</span></label>
+        <label class="cfopt"><input type="checkbox" data-facet="finish" value="Gloss"><span>Gloss</span></label>
+        <label class="cfopt"><input type="checkbox" data-facet="finish" value="Matte"><span>Matte</span></label>
+        <label class="cfopt"><input type="checkbox" data-facet="finish" value="Opaque"><span>Opaque</span></label>
+        <label class="cfopt"><input type="checkbox" data-facet="finish" value="Glitter"><span>Glitter</span></label>
+        <label class="cfopt"><input type="checkbox" data-facet="finish" value="Pearl"><span>Pearl</span></label>
+        <label class="cfopt"><input type="checkbox" data-facet="finish" value="Crackle"><span>Crackle</span></label>
+        <label class="cfopt"><input type="checkbox" data-facet="finish" value="Gradient"><span>Gradient</span></label>
+        <label class="cfopt"><input type="checkbox" data-facet="finish" value="Print"><span>Print</span></label>
+        <label class="cfopt"><input type="checkbox" data-facet="finish" value="Transparent"><span>Transparent</span></label>
+        <label class="cfopt"><input type="checkbox" data-facet="finish" value="Casting resin"><span>Casting resin</span></label>
+      </div>
+      <div class="cfdrop__panel" id="panel-industry" data-panel="industry" hidden>
+        <p class="cfdrop__title">Industry</p>
+        <label class="cfopt"><input type="checkbox" data-facet="industry" value="Cosmetics"><span>Cosmetics</span></label>
+        <label class="cfopt"><input type="checkbox" data-facet="industry" value="Perfumery"><span>Perfumery</span></label>
+        <label class="cfopt"><input type="checkbox" data-facet="industry" value="Liquor"><span>Liquor</span></label>
+        <label class="cfopt"><input type="checkbox" data-facet="industry" value="Packaging"><span>Packaging</span></label>
+        <label class="cfopt"><input type="checkbox" data-facet="industry" value="Tableware"><span>Tableware</span></label>
+        <label class="cfopt"><input type="checkbox" data-facet="industry" value="Bottleware"><span>Bottleware</span></label>
+        <label class="cfopt"><input type="checkbox" data-facet="industry" value="Cookware"><span>Cookware</span></label>
+        <label class="cfopt"><input type="checkbox" data-facet="industry" value="Appliances"><span>Appliances</span></label>
+        <label class="cfopt"><input type="checkbox" data-facet="industry" value="Industrial"><span>Industrial</span></label>
+        <label class="cfopt"><input type="checkbox" data-facet="industry" value="Architectural"><span>Architectural</span></label>
+        <label class="cfopt"><input type="checkbox" data-facet="industry" value="Medical"><span>Medical</span></label>
+        <label class="cfopt"><input type="checkbox" data-facet="industry" value="Jewellery"><span>Jewellery</span></label>
+        <label class="cfopt"><input type="checkbox" data-facet="industry" value="Artifacts"><span>Artifacts</span></label>
+      </div>
+        </div>
+      </div>
+
+      <div class="cfsheet__backdrop" id="cat-backdrop" hidden></div>
+
+      <div class="cgrid" id="cat-grid">
+        {items.map((item) => {
+          const img = responsive(item.image, { widths: [400, 800] });
+          // Regenerated from the fields rather than stored, so editing a title
+          // can never leave a stale search index behind.
+          const search = [item.title, item.system, item.substrate,
+                          ...(item.finishes || []), ...(item.industries || [])]
+                          .filter(Boolean).join(' ').toLowerCase();
+          return (
+            <article class="ccard"
+                     data-substrate={item.substrate}
+                     data-finish={(item.finishes || []).join('|')}
+                     data-industry={(item.industries || []).join('|')}
+                     data-search={search}>
+              <div class="ccard__media">
+                <img src={img?.src} srcset={img?.srcset} sizes="(max-width: 700px) 45vw, 300px"
+                     loading="lazy" decoding="async" alt={altOf(item.image)} />
+              </div>
+              <h3 class="ccard__name">{item.title}</h3>
+              {item.system && <p class="ccard__system">{item.system}</p>}
+              <p class="ccard__tags">
+                <span class="ccard__tag">{item.substrate}</span>
+                {(item.finishes || []).slice(0, 1).map((f) => <span class="ccard__tag">{f}</span>)}
+              </p>
+            </article>
+          );
+        })}
+      </div>
+
+      <div class="cempty" id="cat-empty" hidden>
+        <p class="cempty__title">Nothing matches those filters<span class="dot">.</span></p>
+        <p class="cempty__text">We formulate to order, so the finish you need may not be photographed yet. Describe it and we will make it.</p>
+        <div class="cempty__actions">
+          <button class="btn btn--outline" type="button" data-clear-filters>Clear filters</button>
+          <a class="btn btn--ink" href="/contact/">Talk to us <span class="arrow" aria-hidden="true">&#8594;</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section cta-final" aria-label="Request a finish">
+    <div class="container">
+      <h2 class="cta-final__title" data-reveal>Need a finish you cannot see here<span class="dot">?</span></h2>
+      <p class="cta-final__lead" data-reveal>Every system is formulated to order. Send the substrate and the look you are after.</p>
+      <div class="cta-final__actions" data-reveal>
+        <a class="btn btn--ink" href="/contact/">Talk to us <span class="arrow" aria-hidden="true">&#8594;</span></a>
+        <a class="cta-final__alt" href="https://wa.me/919819362380?text=Hi%20Colortek%2C%20I%20am%20looking%20for%20a%20finish." target="_blank" rel="noopener">WhatsApp us</a>
+        <a class="cta-final__alt" href="tel:+919819362380">Call +91 98193 62380</a>
+      </div>
+    </div>
+  </section>
+
+</Base>

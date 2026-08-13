@@ -1,0 +1,163 @@
+---
+/**
+ * Shared page shell: head, nav, mobile menu, footer.
+ *
+ * Every SEO field is a prop so the admin panel can drive it per page.
+ * Asset paths are absolute (/assets/...) because pages now live at nested
+ * URLs like /glass/ — relative paths would resolve to /glass/assets/... .
+ */
+import CookieNotice from '../components/CookieNotice.astro';
+
+const {
+  title,
+  description,
+  ogImage = '/assets/images/hero/isotrap-gold-bottles-dark.jpg',
+  noindex = false,
+  jsonLd,
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImageAbsolute = new URL(ogImage, Astro.site).href;
+
+// Marked server-side rather than in JavaScript: it works without JS, and the
+// old script matched on ".html" filenames which every directory URL now breaks.
+const path = Astro.url.pathname;
+const nav = [
+  { href: '/products/', label: 'Products' },
+  { href: '/gallery/', label: 'Gallery' },
+  { href: '/about/', label: 'About' },
+  { href: '/blog/', label: 'Blog' },
+  { href: '/faq/', label: 'FAQ' },
+  { href: '/contact/', label: 'Contact' },
+];
+const isCurrent = (href) => path === href || (href !== '/' && path.startsWith(href));
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>{title}</title>
+  <meta name="description" content={description}>
+  <link rel="canonical" href={canonical}>
+  {noindex && <meta name="robots" content="noindex, nofollow">}
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content={canonical}>
+  <meta property="og:title" content={title}>
+  <meta property="og:description" content={description}>
+  <meta property="og:image" content={ogImageAbsolute}>
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" type="image/png" href="/assets/images/brand/favicon.png">
+  <link rel="preload" href="/assets/fonts/archivo-variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/assets/css/main.css">
+
+  {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="nav" id="nav">
+  <div class="nav__inner">
+    <a class="nav__logo" href="/" aria-label="Colortek home">
+      <img src="/assets/images/brand/colortek-logo-dark.png" width="755" height="241" alt="Colortek">
+    </a>
+
+    <ul class="nav__group" aria-label="Primary">
+      {nav.map((item) => (
+        <li>
+          <a class="nav__link" href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+            {item.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="menu" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<nav class="menu" id="menu" aria-label="Menu">
+  <div class="menu__logo">
+    <img src="/assets/images/brand/colortek-logo.png" width="755" height="241" alt="Colortek">
+  </div>
+  {nav.map((item) => <a class="menu__link" href={item.href}>{item.label}</a>)}
+  <div class="menu__meta">
+    <a href="tel:+919819362380">+91 98193 62380</a>
+    <a href="mailto:info@colortek.in">info@colortek.in</a>
+  </div>
+</nav>
+
+<main id="main">
+  <slot />
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <img src="/assets/images/brand/colortek-logo.png" width="755" height="241" alt="Colortek">
+        <p>
+          Colourtech Coating (India) Pvt. Ltd. Specialty coatings for glass,
+          plastics, ceramics, metal and 3D resins since 2000.
+        </p>
+      </div>
+
+      <div>
+        <div class="footer__title">Products</div>
+        <ul class="footer__list">
+          {/* Two footer variants existed: index.html and thanks.html pointed at
+              products.html#glass — anchors that never existed — while the other
+              17 pages linked directly and carried a sixth "Full gallery" item.
+              Standardised on the 17-page version, which was the correct one. */}
+          <li><a href="/glass/">Glass coatings</a></li>
+          <li><a href="/plastics/">Plastic coatings</a></li>
+          <li><a href="/metal/">Metal coatings</a></li>
+          <li><a href="/ceramics/">Ceramic coatings</a></li>
+          <li><a href="/3d/">3D printing resins</a></li>
+          <li><a href="/gallery/">Full gallery</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer__title">Company</div>
+        <ul class="footer__list">
+          <li><a href="/about/">About</a></li>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/faq/">FAQ</a></li>
+          <li><a href="/contact/">Contact</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer__title">Contact</div>
+        <ul class="footer__list">
+          <li><a href="tel:+919819362380">+91 98193 62380</a></li>
+          <li><a href="mailto:info@colortek.in">info@colortek.in</a></li>
+          <li>
+            B-37, MIDC Phase I, Kalyan Road,<br>
+            Golavali, Shilphata, Dombivli (E),<br>
+            421 203, Maharashtra, India
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <span>&copy; 2026 Colourtech Coating (India) Pvt. Ltd.</span>
+      <span>ISO 9001:2015 certified</span>
+      <span class="footer__credit">Designed and developed by <a href="https://gaa-tha.com/" target="_blank" rel="noopener">Gaatha</a></span>
+    </div>
+  </div>
+</footer>
+
+<CookieNotice measurementId={undefined} />
+
+<script src="/assets/js/main.js" defer></script>
+</body>
+</html>

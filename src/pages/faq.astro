@@ -1,0 +1,98 @@
+---
+import Base from '../layouts/Base.astro';
+import { toHTML } from '@portabletext/to-html';
+import { sanityClient } from 'sanity:client';
+
+/**
+ * The first page reading from Sanity.
+ *
+ * Each answer is stored once and rendered twice: as the visible accordion,
+ * and inside the FAQPage structured data. Google requires those to match, and
+ * generating both from one source is what makes that guaranteed rather than
+ * something an editor has to remember.
+ */
+const page = await sanityClient.fetch(`*[_id == "faqPage"][0]{
+  heading, intro, seo,
+  groups[]{ title, hint, colour, questions[]{ question, answer } }
+}`);
+
+// Google allows a small set of tags inside a FAQ answer: p, br, ol, ul, li,
+// a, b, strong, i, em. That is exactly what the editor can produce.
+const renderAnswer = (blocks) =>
+  toHTML(blocks || [], {
+    components: {
+      marks: {
+        link: ({ children, value }) =>
+          `<a href="${value?.href || '#'}">${children}</a>`,
+      },
+    },
+  });
+
+const allQuestions = (page?.groups || []).flatMap((g) => g.questions || []);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: allQuestions.map((q) => ({
+    '@type': 'Question',
+    name: q.question,
+    acceptedAnswer: { '@type': 'Answer', text: renderAnswer(q.answer) },
+  })),
+};
+
+// The very first question on the page opens by default; the rest are closed.
+let questionIndex = 0;
+---
+
+<Base
+  title={page?.seo?.title || 'FAQ | Colortek Specialty Coatings'}
+  description={page?.seo?.description || ''}
+  jsonLd={jsonLd}
+>
+
+  <!-- ============ PAGE HERO ============ -->
+  <section class="page-hero">
+    <div class="page-hero__inner">
+      <h1 class="hero__title hero__title--md">{page?.heading}<span class="dot">.</span></h1>
+      <p class="hero__sub">{page?.intro}</p>
+    </div>
+  </section>
+
+  <!-- ============ FAQ GROUPS ============ -->
+  <section class="section" aria-label="Frequently asked questions">
+    <div class="container">
+      {(page?.groups || []).map((group) => (
+        <div class="faqgrp" data-reveal>
+          <div class="faqgrp__head">
+            <h2 class="faqgrp__title" style={`--tag: var(--${group.colour})`}>{group.title}</h2>
+            <p class="faqgrp__hint">{group.hint}</p>
+          </div>
+          <div class="faq">
+            {(group.questions || []).map((q) => (
+              <details class="faq__item" open={questionIndex++ === 0}>
+                <summary class="faq__q"><h3>{q.question}</h3></summary>
+                <div class="faq__a">
+                  <Fragment set:html={renderAnswer(q.answer)} />
+                </div>
+              </details>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- ============ CTA ============ -->
+  <section class="section cta-final" aria-label="Ask us directly">
+    <div class="container">
+      <h2 class="cta-final__title" data-reveal>Didn't find your answer<span class="dot">?</span></h2>
+      <p class="cta-final__lead" data-reveal>Ask the R&amp;D team directly. A photo of your part is a good start.</p>
+      <div class="cta-final__actions" data-reveal>
+        <a class="btn btn--ink" href="/contact/">Talk to us <span class="arrow" aria-hidden="true">&#8594;</span></a>
+        <a class="cta-final__alt" href="https://wa.me/919819362380?text=Hi%20Colortek%2C%20I%20have%20a%20question." target="_blank" rel="noopener">WhatsApp us</a>
+        <a class="cta-final__alt" href="tel:+919819362380">Call +91 98193 62380</a>
+      </div>
+    </div>
+  </section>
+
+</Base>

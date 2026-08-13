@@ -1,0 +1,42 @@
+# Netlify redirects.
+#
+# 1. Old WordPress URLs -> new pages. The live site has been indexed by Google
+#    since 2024; without these, every ranking and backlink for those addresses
+#    would 404 on launch day. 301 = permanent, which is what passes ranking on.
+/aboutus              /about/       301!
+/aboutus/             /about/       301!
+/product              /products/    301!
+/product/             /products/    301!
+/get-in-touch         /contact/     301!
+/get-in-touch/        /contact/     301!
+
+# 2. The 13 WordPress theme demo posts that were never deleted — photography
+#    and branding filler indexed under a coatings domain. Retired, not migrated.
+/hello-world/                              /blog/  301!
+/cultivating-originality-in-photography/   /blog/  301!
+/cultivating-originality-in-photography-dark/ /blog/ 301!
+/is-it-time-to-rebrand/                    /blog/  301!
+/is-it-time-to-rebrand-2/                  /blog/  301!
+/is-it-time-to-rebrand-dark/               /blog/  301!
+/simplistic-photo-setup/                   /blog/  301!
+/setting-up-the-creativity/                /blog/  301!
+/setting-up-the-creativity-2/              /blog/  301!
+/endless-road-stories/                     /blog/  301!
+/design-to-remember/                       /blog/  301!
+/start-unique-experience/                  /blog/  301!
+/future-business-ideas/                    /blog/  301!
+
+# 3. The client wrote down /admin-panel; /admin is the real route.
+/admin-panel          /admin/        301!
+/admin-panel/*        /admin/:splat  301!
+
+# 4. Studio routing. It is a single-page app: /admin/structure/faqPage is
+#    handled by JavaScript, not by a file on disk, so every path under /admin
+#    must serve the studio shell (200, not a redirect) or refreshing a page
+#    inside the admin panel would 404.
+#
+#    Do NOT add "/admin  /admin/  301!" here. Netlify already normalises
+#    trailing slashes, so that rule and Netlify's own normalisation redirect
+#    to each other forever — ERR_TOO_MANY_REDIRECTS on the admin panel.
+#    Tried and reverted. The rewrite below covers /admin and everything under it.
+/admin/*              /admin/index.html  200
