@@ -16,6 +16,16 @@ import StudioLogo from './sanity/tools/StudioLogo.jsx';
  */
 const SINGLETONS = ['siteSettings', 'homePage', 'aboutPage', 'productsPage', 'contactPage', 'faqPage'];
 
+/** Every built-in action that can make one of the singleton pages disappear. */
+const REMOVES_A_PAGE = [
+  'delete',
+  'duplicate',
+  'unpublish',
+  'unpublishVersion',
+  'discardChanges',
+  'discardVersion',
+];
+
 export default defineConfig({
   name: 'colortek',
   title: 'Colortek',
@@ -32,6 +42,15 @@ export default defineConfig({
 
   projectId: '5ih96glo',
   dataset: 'production',
+
+  // "Releases" and "Scheduled drafts" let a team stage a batch of changes and
+  // publish them at a set time. Colortek publishes one edit at a time, and the
+  // feature has a sharp edge: with the view switched to "Published", pressing +
+  // fails with "Cannot create a published document — choose a destination",
+  // which is meaningless to a non-technical editor. Off, so new documents are
+  // always plain drafts.
+  releases: { enabled: false },
+  scheduledDrafts: { enabled: false },
 
   // No basePath here on purpose: the embedded Studio takes its path from
   // `studioBasePath` in astro.config.mjs, and setting both makes the
@@ -125,11 +144,18 @@ export default defineConfig({
     templates: (prev) => prev.filter((t) => !SINGLETONS.includes(t.schemaType)),
   },
 
+  // The one-off pages must not be removable. "Delete" and "Duplicate" were
+  // already blocked, but that left a hole: Unpublish turns the page into a
+  // draft, and Discard changes then deletes the draft — two ordinary-looking
+  // clicks and the home page is gone. That happened. Every action that can
+  // remove one of these pages is blocked below.
+  //
+  // "Restore" is deliberately kept: it is how an earlier version is brought
+  // back from History, which is the client's undo button.
   document: {
-    // Same guard on the "create" action inside document lists.
     actions: (prev, { schemaType }) =>
       SINGLETONS.includes(schemaType)
-        ? prev.filter(({ action }) => action !== 'duplicate' && action !== 'delete')
+        ? prev.filter(({ action }) => !REMOVES_A_PAGE.includes(action))
         : prev,
   },
 });
