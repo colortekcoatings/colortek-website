@@ -13,7 +13,6 @@ import aboutPage from './singletons/aboutPage.js';
 import rangePage, { system } from './documents/rangePage.js';
 import blogPost from './documents/blogPost.js';
 import galleryItem from './documents/galleryItem.js';
-import enquiry from './documents/enquiry.js';
 
 export const schemaTypes = [
   // objects
@@ -31,5 +30,4 @@ export const schemaTypes = [
   rangePage,
   blogPost,
   galleryItem,
-  enquiry,
 ];
