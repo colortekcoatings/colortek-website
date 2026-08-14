@@ -1,8 +1,10 @@
-import { defineConfig } from 'sanity';
+import { defineConfig, buildLegacyTheme } from 'sanity';
 import { structureTool } from 'sanity/structure';
 import { visionTool } from '@sanity/vision';
 import { schemaTypes } from './sanity/schemas/index.js';
 import EnquiriesTool from './sanity/tools/EnquiriesTool.jsx';
+import Welcome from './sanity/tools/Welcome.jsx';
+import StudioLogo from './sanity/tools/StudioLogo.jsx';
 
 /**
  * The admin panel itself, served at /admin.
@@ -17,6 +19,23 @@ const SINGLETONS = ['siteSettings', 'homePage', 'aboutPage', 'productsPage', 'co
 export default defineConfig({
   name: 'colortek',
   title: 'Colortek',
+
+  studio: {
+    components: { logo: StudioLogo },
+  },
+
+  // Colortek's own red in place of Sanity's default purple, so the panel reads
+  // as part of the client's site rather than a generic tool. Colours are taken
+  // from the website's stylesheet so the two cannot drift apart.
+  theme: buildLegacyTheme({
+    '--brand-primary': '#e31e24',
+    '--brand-primary--inverted': '#ffffff',
+    '--default-button-primary-color': '#e31e24',
+    '--default-button-success-color': '#3f9c35',
+    '--default-button-warning-color': '#ef7d00',
+    '--default-button-danger-color': '#e31e24',
+    '--focus-color': '#e31e24',
+  }),
 
   projectId: '5ih96glo',
   dataset: 'production',
@@ -93,13 +112,13 @@ export default defineConfig({
 
   // "Enquiries" sits beside Structure in the top bar. It reads through a
   // server-side function so the Netlify key never reaches the browser.
+  // "Vision" and "Releases" are developer tools that mean nothing to the
+  // client and only invite confusion, so they are removed from the top bar.
+  // Vision still works for us at /admin/#/vision if ever needed.
   tools: (prev) => [
-    ...prev,
-    {
-      name: 'enquiries',
-      title: 'Enquiries',
-      component: EnquiriesTool,
-    },
+    { name: 'welcome', title: 'Start here', component: Welcome },
+    ...prev.filter((t) => !['vision', 'releases'].includes(t.name)),
+    { name: 'enquiries', title: 'Enquiries', component: EnquiriesTool },
   ],
 
   schema: {

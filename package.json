@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Colourtech Coating (India) Pvt. Ltd. \u2014 colortek.in",
+  "description": "Colourtech Coating (India) Pvt. Ltd. — colortek.in",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
@@ -16,6 +16,7 @@
     "@portabletext/to-html": "^6.0.0",
     "@sanity/astro": "^3.5.0",
     "@sanity/client": "^7.26.2",
+    "@sanity/color": "^3.0.8",
     "@sanity/image-url": "^2.1.1",
     "@sanity/vision": "^6.9.2",
     "astro": "^5.14.1",
