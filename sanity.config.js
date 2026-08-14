@@ -1,4 +1,4 @@
-import { defineConfig, buildLegacyTheme } from 'sanity';
+import { defineConfig } from 'sanity';
 import { structureTool } from 'sanity/structure';
 import { visionTool } from '@sanity/vision';
 import { schemaTypes } from './sanity/schemas/index.js';
@@ -24,18 +24,11 @@ export default defineConfig({
     components: { logo: StudioLogo },
   },
 
-  // Colortek's own red in place of Sanity's default purple, so the panel reads
-  // as part of the client's site rather than a generic tool. Colours are taken
-  // from the website's stylesheet so the two cannot drift apart.
-  theme: buildLegacyTheme({
-    '--brand-primary': '#e31e24',
-    '--brand-primary--inverted': '#ffffff',
-    '--default-button-primary-color': '#e31e24',
-    '--default-button-success-color': '#3f9c35',
-    '--default-button-warning-color': '#ef7d00',
-    '--default-button-danger-color': '#e31e24',
-    '--focus-color': '#e31e24',
-  }),
+  // Note: do NOT set `theme: buildLegacyTheme(...)`. It is a Sanity v2-era API
+  // that replaces the whole theme rather than tinting it, and the current UI
+  // components collapse — overlapping text, and the dark theme lost. Tried and
+  // reverted. Branding is the logo above; the colours stay as Sanity ships them.
+
 
   projectId: '5ih96glo',
   dataset: 'production',
