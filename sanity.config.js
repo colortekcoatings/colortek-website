@@ -39,6 +39,10 @@ export default defineConfig({
 
   plugins: [
     structureTool({
+      // Note: Sanity has no setting to auto-select a document, so the pane
+      // beside this list is empty until the editor picks a page. Making a
+      // document the root instead would remove the list entirely, which is
+      // worse. The "Start here" screen is the landing view for this reason.
       structure: (S) =>
         S.list()
           .title('Website')
