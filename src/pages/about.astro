@@ -11,12 +11,35 @@ const page = await sanityClient.fetch(`*[_id == "aboutPage"][0]{
   vmvHeading, vmvPanels[]{ title, body, colour }, values,
   timelineHeading, timelineRange, milestones[]{ year, text },
   secondStoryTitle, secondStoryBody, secondStoryImage, secondStoryCtaLabel, secondStoryCtaHref,
-  video, stats[]{ value, suffix, label, plain },
+  video{ heading, lead, youtubeId, poster, file{ asset->{ url } } },
+  stats[]{ value, suffix, label, plain },
   whyHeading, whyLead, whyCards[]{ title, body, icon }
 }`);
 
+const settings = await sanityClient.fetch(
+  `*[_id == "siteSettings"][0]{ phone, phoneLink, whatsappNumber }`
+);
+const waNumber  = settings?.whatsappNumber || '919819362380';
+const phone     = settings?.phone     || '+91 98193 62380';
+const phoneLink = settings?.phoneLink || '+919819362380';
+
 const storyHtml  = toHTML(page?.storyBody || []);
 const story2Html = toHTML(page?.secondStoryBody || []);
+
+// The three photographs on this page. They were hardcoded to files in
+// public/assets, which meant editing them in the panel changed nothing —
+// the fields existed and were simply never read. They come from Sanity now.
+const storyImg  = responsive(page?.storyImage, { widths: [600, 1200] });
+const story2Img = responsive(page?.secondStoryImage, { widths: [800, 1600] });
+const posterImg = responsive(page?.video?.poster, { width: 1600 });
+
+// The factory film. main.js already knows how to swap in a YouTube player when
+// the wrapper carries data-youtube — the template simply never passed it, so
+// the panel's YouTube and upload fields did nothing. Order of preference:
+// YouTube link, then an uploaded file, then the placeholder footage shipped
+// with the code. The client can replace the placeholder without a developer.
+const youtubeId = page?.video?.youtubeId?.trim() || null;
+const filmSrc = page?.video?.file?.asset?.url || '/assets/videos/colortek-factory.mp4';
 ---
 
 <Base title={page?.seo?.title} description={page?.seo?.description}>
@@ -57,10 +80,10 @@ const story2Html = toHTML(page?.secondStoryBody || []);
           </p>
         </div>
         <figure class="story__media" data-reveal style="--d: 90ms">
-          <img src="/assets/images/gallery/metallic-cylinders-square.jpg" width="1200" height="1200"
-               loading="lazy" decoding="async"
-               alt="A row of cylinder bottles coated in gold, magenta, bronze, blue and copper metallics">
-          <figcaption>One shape, five of the hundreds of shades the plant can hold.</figcaption>
+          <img src={storyImg?.src} srcset={storyImg?.srcset}
+               sizes="(max-width: 900px) 100vw, 45vw" width="1200" height="1200"
+               loading="lazy" decoding="async" alt={altOf(page?.storyImage)}>
+          <figcaption>{page?.storyImage?.caption}</figcaption>
         </figure>
       </div>
     </div>
@@ -93,15 +116,15 @@ const story2Html = toHTML(page?.secondStoryBody || []);
   <!-- ============ FACTORY FILM ============ -->
   <section class="section section--flush" aria-label="Inside the plant">
     <div class="container">
-      <div class="vplayer" data-reveal>
+      <div class="vplayer" data-reveal data-youtube={youtubeId || undefined}>
         <video class="vplayer__video" preload="none" playsinline
-               poster="/assets/videos/factory-poster.jpg">
-          <source src="/assets/videos/colortek-factory.mp4" type="video/mp4">
+               poster={posterImg?.src}>
+          <source src={filmSrc} type="video/mp4">
         </video>
         <button class="vplayer__cover" type="button">
           <span class="vplayer__play" aria-hidden="true">&#9654;</span>
-          <span class="vplayer__title">Inside the plant<span class="dot">.</span></span>
-          <span class="vplayer__sub">The Dombivli factory, on film. Press play.</span>
+          <span class="vplayer__title">{page?.video?.heading || 'Inside the plant'}<span class="dot">.</span></span>
+          <span class="vplayer__sub">{page?.video?.lead || 'The Dombivli factory, on film. Press play.'}</span>
         </button>
       </div>
     </div>
@@ -199,10 +222,10 @@ const story2Html = toHTML(page?.secondStoryBody || []);
     <div class="container">
       <div class="story story--flip">
         <figure class="story__media" data-reveal>
-          <img src="/assets/images/about/rd-lab-chemist.jpg" width="1600" height="1059"
-               loading="lazy" decoding="async"
-               alt="Chemist running a titration at the bench in the Colortek R&amp;D laboratory">
-          <figcaption>The R&amp;D centre in Dombivli, where every system starts.</figcaption>
+          <img src={story2Img?.src} srcset={story2Img?.srcset}
+               sizes="(max-width: 900px) 100vw, 45vw" width="1600" height="1059"
+               loading="lazy" decoding="async" alt={altOf(page?.secondStoryImage)}>
+          <figcaption>{page?.secondStoryImage?.caption}</figcaption>
         </figure>
         <div class="story__copy" data-reveal style="--d: 90ms">
           <h2 class="story__title">Engineered in-house<span class="dot">.</span></h2>
@@ -233,8 +256,8 @@ const story2Html = toHTML(page?.secondStoryBody || []);
       <p class="cta-final__lead" data-reveal>{page?.cta?.lead}</p>
       <div class="cta-final__actions" data-reveal>
         <a class="btn btn--ink" href="/contact/">Talk to us <span class="arrow" aria-hidden="true">&#8594;</span></a>
-        <a class="cta-final__alt" href="https://wa.me/919819362380?text=Hi%20Colortek%2C%20I%27d%20like%20to%20visit%20the%20plant." target="_blank" rel="noopener">WhatsApp us</a>
-        <a class="cta-final__alt" href="tel:+919819362380">Call +91 98193 62380</a>
+        <a class="cta-final__alt" href={`https://wa.me/${waNumber}?text=${encodeURIComponent("Hi Colortek, I'd like to visit the plant.")}`} target="_blank" rel="noopener">WhatsApp us</a>
+        <a class="cta-final__alt" href={`tel:${phoneLink}`}>Call {phone}</a>
       </div>
     </div>
   </section>

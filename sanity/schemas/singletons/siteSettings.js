@@ -75,6 +75,15 @@ export default defineType({
       description: 'The short paragraph next to the logo in the footer.',
     }),
     defineField({
+      name: 'footerAddress',
+      title: 'Footer address',
+      type: 'text',
+      rows: 3,
+      group: 'defaults',
+      description:
+        'The postal address in the footer of every page. Put each line on its own line.',
+    }),
+    defineField({
       name: 'defaultOgImage',
       title: 'Default share image',
       type: 'image',

@@ -7,17 +7,37 @@
  * URLs like /glass/ — relative paths would resolve to /glass/assets/... .
  */
 import CookieNotice from '../components/CookieNotice.astro';
+import { sanityClient } from 'sanity:client';
+import { urlFor } from '../lib/image.js';
 
 const {
   title,
   description,
-  ogImage = '/assets/images/hero/isotrap-gold-bottles-dark.jpg',
+  ogImage,
   noindex = false,
   jsonLd,
 } = Astro.props;
 
+// The phone number, email and address appear on all 21 pages. They were written
+// into this file by hand, so editing them in Site settings changed the contact
+// page and nothing else — the most likely edit a client ever makes, silently
+// failing on 20 pages. They come from the panel now.
+const settings = await sanityClient.fetch(`*[_id == "siteSettings"][0]{
+  phone, phoneLink, email, whatsappNumber, footerBlurb, footerAddress, defaultOgImage
+}`);
+
+const phone     = settings?.phone     || '+91 98193 62380';
+const phoneLink = settings?.phoneLink || '+919819362380';
+const email     = settings?.email     || 'info@colortek.in';
+
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
-const ogImageAbsolute = new URL(ogImage, Astro.site).href;
+
+// Share image: the page's own, then the one set in Site settings, then the
+// picture shipped with the code.
+const fallbackOg = settings?.defaultOgImage?.asset
+  ? urlFor(settings.defaultOgImage).width(1200).height(630).fit('crop').auto('format').url()
+  : '/assets/images/hero/isotrap-gold-bottles-dark.jpg';
+const ogImageAbsolute = new URL(ogImage || fallbackOg, Astro.site).href;
 
 // Marked server-side rather than in JavaScript: it works without JS, and the
 // old script matched on ".html" filenames which every directory URL now breaks.
@@ -49,6 +69,9 @@ const isCurrent = (href) => path === href || (href !== '/' && path.startsWith(hr
   <meta property="og:description" content={description}>
   <meta property="og:image" content={ogImageAbsolute}>
   <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="preconnect" href="https://cdn.sanity.io" crossorigin>
+  <link rel="dns-prefetch" href="https://cdn.sanity.io">
 
   <link rel="icon" type="image/png" href="/assets/images/brand/favicon.png">
   <link rel="preload" href="/assets/fonts/archivo-variable.woff2" as="font" type="font/woff2" crossorigin>
@@ -88,8 +111,8 @@ const isCurrent = (href) => path === href || (href !== '/' && path.startsWith(hr
   </div>
   {nav.map((item) => <a class="menu__link" href={item.href}>{item.label}</a>)}
   <div class="menu__meta">
-    <a href="tel:+919819362380">+91 98193 62380</a>
-    <a href="mailto:info@colortek.in">info@colortek.in</a>
+    <a href={`tel:${phoneLink}`}>{phone}</a>
+    <a href={`mailto:${email}`}>{email}</a>
   </div>
 </nav>
 
@@ -103,8 +126,8 @@ const isCurrent = (href) => path === href || (href !== '/' && path.startsWith(hr
       <div class="footer__brand">
         <img src="/assets/images/brand/colortek-logo.png" width="755" height="241" alt="Colortek">
         <p>
-          Colourtech Coating (India) Pvt. Ltd. Specialty coatings for glass,
-          plastics, ceramics, metal and 3D resins since 2000.
+          {settings?.footerBlurb ||
+            'Colourtech Coating (India) Pvt. Ltd. Specialty coatings for glass, plastics, ceramics, metal and 3D resins since 2000.'}
         </p>
       </div>
 
@@ -137,12 +160,13 @@ const isCurrent = (href) => path === href || (href !== '/' && path.startsWith(hr
       <div>
         <div class="footer__title">Contact</div>
         <ul class="footer__list">
-          <li><a href="tel:+919819362380">+91 98193 62380</a></li>
-          <li><a href="mailto:info@colortek.in">info@colortek.in</a></li>
+          <li><a href={`tel:${phoneLink}`}>{phone}</a></li>
+          <li><a href={`mailto:${email}`}>{email}</a></li>
           <li>
-            B-37, MIDC Phase I, Kalyan Road,<br>
-            Golavali, Shilphata, Dombivli (E),<br>
-            421 203, Maharashtra, India
+            {(settings?.footerAddress ||
+              'B-37, MIDC Phase I, Kalyan Road\nGolavali, Shilphata, Dombivli (E)\n421 203, Maharashtra, India')
+              .split('\n')
+              .map((line, i) => <>{i > 0 && <br />}{line}</>)}
           </li>
         </ul>
       </div>

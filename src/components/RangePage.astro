@@ -20,7 +20,13 @@ const standalone = page?.standaloneProducts || [];
 const cert = page?.complianceBlock;
 
 const heroArt = responsive(page?.heroImage, { widths: [900, 1800] });
-const waHref = `https://wa.me/919819362380?text=${encodeURIComponent(page?.cta?.whatsappText || '')}`;
+const settings = await sanityClient.fetch(
+  `*[_id == "siteSettings"][0]{ phone, phoneLink, whatsappNumber }`
+);
+const waNumber = settings?.whatsappNumber || '919819362380';
+const phone     = settings?.phone     || '+91 98193 62380';
+const phoneLink = settings?.phoneLink || '+919819362380';
+const waHref = `https://wa.me/${waNumber}?text=${encodeURIComponent(page?.cta?.whatsappText || '')}`;
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -242,7 +248,7 @@ const jsonLd = {
       <div class="cta-final__actions" data-reveal>
         <a class="btn btn--ink" href="/contact/">Talk to us <span class="arrow" aria-hidden="true">&#8594;</span></a>
         <a class="cta-final__alt" href={waHref} target="_blank" rel="noopener">WhatsApp us</a>
-        <a class="cta-final__alt" href="tel:+919819362380">Call +91 98193 62380</a>
+        <a class="cta-final__alt" href={`tel:${phoneLink}`}>Call {phone}</a>
       </div>
     </div>
   </section>

@@ -9,6 +9,11 @@
  * should be a deliberate decision with the client.
  */
 import Base from '../layouts/Base.astro';
+import { sanityClient } from 'sanity:client';
+
+// Only the contact email comes from the panel — the notice itself stays fixed.
+const settings = await sanityClient.fetch(`*[_id == "siteSettings"][0]{ email }`);
+const email = settings?.email || 'info@colortek.in';
 ---
 
 <Base
@@ -34,7 +39,7 @@ import Base from '../layouts/Base.astro';
           This website is operated by Colourtech Coating (India) Pvt. Ltd.,
           trading as Colortek, B-37, MIDC Phase I, Kalyan Road, Golavali,
           Shilphata, Dombivli (E), 421 203, Maharashtra, India. For anything
-          in this notice, write to <a href="mailto:info@colortek.in">info@colortek.in</a>.
+          in this notice, write to <a href={`mailto:${email}`}>{email}</a>.
         </p>
 
         <h2>What we collect</h2>
@@ -74,7 +79,7 @@ import Base from '../layouts/Base.astro';
         <p>
           You can ask us what personal data we hold about you, ask for it to be
           corrected, or ask us to delete it. Email
-          <a href="mailto:info@colortek.in">info@colortek.in</a> and we will
+          <a href={`mailto:${email}`}>{email}</a> and we will
           respond. You can change your cookie choice at any time by clearing this
           site's data in your browser, which brings the banner back.
         </p>

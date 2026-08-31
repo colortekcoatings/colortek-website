@@ -25,6 +25,19 @@ export default defineConfig({
   // the panel renders blank. Tried and reverted. If the dev cache goes stale
   // after a schema change, run `npm run fresh` instead.
 
+  // Dev-only cure for "Invalid hook call" on /admin. Vite discovers the
+  // Sanity packages mid-session and pre-bundles them in a second pass; that
+  // pass inlined its own copy of React into the big Studio chunk, so the
+  // browser ran two Reacts and the panel went blank. dedupe forces every
+  // import of react to resolve to the single installed copy. This is NOT the
+  // forbidden optimizeDeps.exclude (see note above) — that suppresses
+  // pre-bundling; this only pins module resolution.
+  vite: {
+    resolve: {
+      dedupe: ['react', 'react-dom', 'react/jsx-runtime'],
+    },
+  },
+
   integrations: [
     sanity({
       projectId: '5ih96glo',

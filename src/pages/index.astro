@@ -112,8 +112,15 @@ const jsonLd = {
                 <a class="industry-marquee__link" href={item.href} tabindex={isDuplicate ? -1 : undefined}>
                   <figure>
                     <div class="thumb">
+                      {/* Not lazy: this row auto-scrolls, so tiles begin
+                          off-screen and lazy loading would only start each
+                          download as the tile slid into view — every one
+                          arriving visibly late. Low priority instead, so they
+                          fetch in the background without competing with the
+                          top of the page. */}
                       <img src={img?.src} srcset={img?.srcset} sizes="232px"
-                           width="232" height="288" loading="lazy" decoding="async" alt={altOf(item.image)} />
+                           width="232" height="288" fetchpriority="low"
+                           decoding="async" alt={altOf(item.image)} />
                     </div>
                     <figcaption>{item.label}</figcaption>
                   </figure>
