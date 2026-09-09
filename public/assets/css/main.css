@@ -451,10 +451,13 @@ body.menu-open { overflow: hidden; }
 }
 
 .hero__sub {
-  max-width: 46ch;
+  /* 62ch, balanced: the sub-heading is a full sentence now — at 46ch it broke
+     into four ragged lines. Balance keeps every line near-equal width. */
+  max-width: 70ch;
   margin: var(--space-6) auto 0;
   font-size: var(--text-lg);
   color: var(--ink-muted);
+  text-wrap: balance;
 }
 
 .hero__actions {
@@ -2588,7 +2591,8 @@ html.js .catpanel.is-entering .glance {
 .industry-marquee figcaption {
   margin-top: var(--space-3);
   font-weight: 600;
-  font-size: var(--text-sm);
+  /* 1.1875rem = 19px — 36% up from the original 14px, per the client. */
+  font-size: 1.1875rem;
 }
 
 @media (max-width: 640px) {
@@ -3908,3 +3912,28 @@ html.js [data-reveal] {
   .cookie__actions { width: 100%; }
   .cookie__actions .btn { flex: 1; }
 }
+
+/* Divider between coating systems that share one sector tab — without it two
+   systems (e.g. ISOTRAP then AQUATRAP) read as one continuous block. */
+.catpanel__divider {
+  height: 3px;
+  border-radius: 999px;
+  margin: var(--space-16) 0;
+  background: linear-gradient(90deg,
+    var(--spec-1), var(--spec-2), var(--spec-3), var(--spec-4),
+    var(--spec-5), var(--spec-6), var(--spec-7));
+  opacity: 0.85;
+}
+
+/* The action line on a certification card. Same size as the em slot it sits
+   in, but visibly clickable, matching the foot link's hover. */
+.cred__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  transition: color var(--dur) var(--ease);
+}
+.cred__link:hover { color: var(--accent); }

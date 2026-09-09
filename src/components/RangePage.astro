@@ -97,6 +97,7 @@ const jsonLd = {
           >
             {(sector.products || []).map((system, j) => (
               <Fragment>
+                {j > 0 && <div class="catpanel__divider" aria-hidden="true"></div>}
                 <div class={`catpanel__grid${j % 2 ? ' catpanel__grid--flip' : ''}`}>
                   {system.image && (() => {
                     const img = responsive(system.image, { widths: [700, 1200] });
@@ -165,6 +166,7 @@ const jsonLd = {
           <section class="catpanel">
             {standalone.map((system, j) => (
               <Fragment>
+                {j > 0 && <div class="catpanel__divider" aria-hidden="true"></div>}
                 <div class={`catpanel__grid${j % 2 ? ' catpanel__grid--flip' : ''}`}>
                   {system.image && (() => {
                     const img = responsive(system.image, { widths: [700, 1200] });

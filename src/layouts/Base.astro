@@ -43,6 +43,7 @@ const ogImageAbsolute = new URL(ogImage || fallbackOg, Astro.site).href;
 // old script matched on ".html" filenames which every directory URL now breaks.
 const path = Astro.url.pathname;
 const nav = [
+  { href: '/', label: 'Home' },
   { href: '/products/', label: 'Products' },
   { href: '/gallery/', label: 'Gallery' },
   { href: '/about/', label: 'About' },
