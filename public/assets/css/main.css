@@ -1371,7 +1371,7 @@ html.js .rail.in .rail__step:nth-child(4) .rail__node { transition-delay: 900ms;
 .why__cell h3 {
   font-size: var(--text-xl);
   font-weight: 700;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
 }
 
 .why__cell > p {
@@ -3937,3 +3937,127 @@ html.js [data-reveal] {
   transition: color var(--dur) var(--ease);
 }
 .cred__link:hover { color: var(--accent); }
+
+/* --------------------------------------------------------------------------
+   Journey — the About timeline. A spectrum spine down the centre; each
+   milestone hangs off it on its own coloured dot, cards alternating sides.
+   Cards reuse the site's coloured-top-edge idiom from the glance tiles.
+   On phones the spine moves to the left edge, all cards to its right.
+   -------------------------------------------------------------------------- */
+
+.jshow { padding-block: var(--space-16); }
+
+/* The section heading rides along: pinned just under the fixed nav while
+   the years scroll past, on a paper fade so cards slide beneath it
+   without collision. */
+.jshow .section-head {
+  position: sticky;
+  top: var(--nav-h);
+  z-index: 2;
+  margin-bottom: 0;
+  /* Solid paper for most of its height, then a short fade: cards dissolve
+     well below the text instead of showing through it. */
+  padding-block: var(--space-4) var(--space-16);
+  background: linear-gradient(to bottom, var(--paper) 90%, transparent);
+}
+
+.jalt {
+  position: relative;
+  list-style: none;
+  margin: 0;
+  padding: var(--space-8) 0 var(--space-6);
+}
+
+.jalt::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: linear-gradient(180deg,
+    var(--spec-1), var(--spec-2), var(--spec-3), var(--spec-4),
+    var(--spec-5), var(--spec-6), var(--spec-7));
+  opacity: 0.9;
+}
+
+.jalt__item {
+  position: relative;
+  width: calc(50% - 44px);
+  padding-block: var(--space-4);
+}
+
+.jalt__item--left { margin-right: auto; }
+.jalt__item--right { margin-left: auto; }
+
+.jalt__dot {
+  position: absolute;
+  top: calc(var(--space-4) + 1.6rem);
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: var(--rule);
+  box-shadow: 0 0 0 3px var(--paper);
+  z-index: 1;
+}
+
+.jalt__item--left .jalt__dot { right: -50px; }
+.jalt__item--right .jalt__dot { left: -50px; }
+
+.jalt__card {
+  background: #fff;
+  border: 1px solid rgba(23, 25, 29, 0.08);
+  border-top: 3px solid var(--rule);
+  border-radius: 14px;
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+}
+
+.jalt__year {
+  display: block;
+  font-weight: 800;
+  font-size: var(--text-xl);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.jalt__text {
+  margin-top: var(--space-2);
+  color: var(--ink-muted);
+  max-width: 52ch;
+}
+
+/* Cards arrive from their own side; the generic reveal handles the rest. */
+html.js .jalt__item--left[data-reveal] { transform: translateX(-28px); }
+html.js .jalt__item--right[data-reveal] { transform: translateX(28px); }
+html.js .jalt__item[data-reveal].in { transform: none; }
+
+.jshow__range {
+  margin-top: var(--space-6);
+  font-size: var(--text-sm);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+@media (max-width: 840px) {
+  .jalt::before { left: 14px; transform: none; }
+  .jalt__item,
+  .jalt__item--left,
+  .jalt__item--right {
+    width: auto;
+    margin: 0;
+    padding-left: 44px;
+  }
+  .jalt__item--left .jalt__dot,
+  .jalt__item--right .jalt__dot { left: 8px; right: auto; }
+  html.js .jalt__item--left[data-reveal],
+  html.js .jalt__item--right[data-reveal] { transform: translateY(20px); }
+  html.js .jalt__item[data-reveal].in { transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.js .jalt__item--left[data-reveal],
+  html.js .jalt__item--right[data-reveal] { transform: none; }
+}

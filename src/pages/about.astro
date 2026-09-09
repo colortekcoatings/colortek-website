@@ -62,22 +62,12 @@ const filmSrc = page?.video?.file?.asset?.url || '/assets/videos/colortek-factor
     <div class="container">
       <div class="story">
         <div class="story__copy" data-reveal>
-          <h2 class="story__title">India's first, since 2000<span class="dot">.</span></h2>
-          <p>
-            Colortek was the first manufacturer in India to produce 1K stoving
-            PU paints for container glass, at a time when every serious
-            perfume brand imported its lacquers. Twenty-five years later the
-            same family-run plant in Dombivli ships ten coating systems across
-            five substrates, from patented ISOTRAP to 24K gold INSHINE.
-          </p>
-          <p>
-            Production has grown from five tonnes a year to a nine-thousand-tonne
-            annual capacity, and every batch is still formulated, mixed and
-            tested in-house, with key raw materials produced on site.
-          </p>
-          <p class="story__tagline">
-            "Your success is our mission. Together, we paint a brighter future."
-          </p>
+          {/* Title, paragraphs and quote come from the panel. They were
+              hardcoded here while the fields were fetched and ignored, so
+              panel edits to the story silently did nothing. */}
+          <h2 class="story__title">{page?.storyTitle}<span class="dot">.</span></h2>
+          <Fragment set:html={storyHtml} />
+          {page?.storyQuote && <p class="story__tagline">{page.storyQuote}</p>}
         </div>
         <figure class="story__media" data-reveal style="--d: 90ms">
           <img src={storyImg?.src} srcset={storyImg?.srcset}
@@ -148,24 +138,31 @@ const filmSrc = page?.video?.file?.asset?.url || '/assets/videos/colortek-factor
     </div>
   </section>
 
-  <!-- ============ JOURNEY (pinned timeline) ============ -->
-  <section class="jpin" aria-label="Company timeline">
-    <div class="jpin__stick">
-      <div class="container">
-        <div class="section-head section-head--sub section-head--ondark">
-          <h2 class="section-head__title">{page?.timelineHeading}<span class="dot">.</span></h2>
-        </div>
+  <!-- ============ JOURNEY ============ -->
+  {/* Alternating centre-spine timeline: the spectrum runs down the middle,
+      each milestone hangs off it on a coloured dot, cards alternate sides
+      and slide in from their own side as they enter view. Normal page
+      scroll — no pinning, no inner scrollbar. On phones the spine moves to
+      the left edge and every card sits right of it. Content is the same
+      milestones list from the admin panel. */}
+  <section class="jshow" aria-label="Company timeline">
+    <div class="container">
+      <div class="section-head section-head--sub" data-reveal>
+        <h2 class="section-head__title">{page?.timelineHeading}<span class="dot">.</span></h2>
       </div>
-      <ol class="jpin__track">
+      <ol class="jalt">
         {(page?.milestones || []).map((m, i) => (
-          <li class="jms" style={`--rule: var(--spec-${(i % 7) + 1})`}>
-            <span class="jms__year">{m.year}</span><p>{m.text}</p>
+          <li class={`jalt__item ${i % 2 ? 'jalt__item--right' : 'jalt__item--left'}`}
+              style={`--rule: var(--spec-${(i % 7) + 1})`} data-reveal>
+            <span class="jalt__dot" aria-hidden="true"></span>
+            <div class="jalt__card">
+              <span class="jalt__year">{m.year}</span>
+              <p class="jalt__text">{m.text}</p>
+            </div>
           </li>
         ))}
       </ol>
-      <div class="jpin__meta" aria-hidden="true">
-        <span>{page?.timelineRange}</span>
-      </div>
+      <p class="jshow__range">{page?.timelineRange}</p>
     </div>
   </section>
 
@@ -173,7 +170,7 @@ const filmSrc = page?.video?.file?.asset?.url || '/assets/videos/colortek-factor
   <section class="section" aria-label="Why manufacturers choose Colortek">
     <div class="container">
       <div class="section-head section-head--sub" data-reveal>
-        <h2 class="section-head__title">Why global manufacturers choose Colortek<span class="dot">.</span></h2>
+        <h2 class="section-head__title">{page?.whyHeading || 'Why global manufacturers choose Colortek'}<span class="dot">.</span></h2>
       </div>
 
       <div class="why">
@@ -203,8 +200,12 @@ const filmSrc = page?.video?.file?.asset?.url || '/assets/videos/colortek-factor
         </article>
         <article class="why__cell" style="--tag: var(--spec-5); --d: 240ms" data-reveal>
           <span class="why__icon" aria-hidden="true"><svg class="why__glyph" width="26" height="26" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M237.66,86.34l-60-60a8,8,0,0,0-11.32,0L37.11,155.57a44.77,44.77,0,0,0,63.32,63.32L212.32,107l22.21-7.4a8,8,0,0,0,3.13-13.25ZM89.11,207.57a28.77,28.77,0,0,1-40.68-40.68l28.8-28.8c8.47-2.9,21.75-4,39.07,5,10.6,5.54,20.18,8,28.56,8.73ZM205.47,92.41a8,8,0,0,0-3.13,1.93l-39.57,39.57c-8.47,2.9-21.75,4-39.07-5-10.6-5.54-20.18-8-28.56-8.73L172,43.31,217.19,88.5Z"/></svg></span>
-          <h3>Dedicated R&amp;D</h3>
-          <p>A 10,000 sq ft centre focused on next-generation coatings.</p>
+          {/* The six cards stay in code for now: their icons and sub-bullet
+              lists have no panel fields yet, and wiring only title and body
+              would drop that content. Full panel control needs a schema
+              extension — planned with the CSR round. */}
+          <h3>R&amp;D and Experience Centre</h3>
+          <p>A 10,000 sq ft R&amp;D centre and an 8,000 sq ft Experience Centre focused on next-generation coatings.</p>
           <ul><li>Sustainable chemistries in development</li><li>Dedicated technical support</li></ul>
         </article>
         <article class="why__cell" style="--tag: var(--spec-6); --d: 300ms" data-reveal>
@@ -228,13 +229,8 @@ const filmSrc = page?.video?.file?.asset?.url || '/assets/videos/colortek-factor
           <figcaption>{page?.secondStoryImage?.caption}</figcaption>
         </figure>
         <div class="story__copy" data-reveal style="--d: 90ms">
-          <h2 class="story__title">Engineered in-house<span class="dot">.</span></h2>
-          <p>
-            A 10,000 sq ft research centre formulates every system to the
-            customer's substrate, line speed and finish, and an 8,000 sq ft
-            Excellence Centre is on the way. Because key raw materials are
-            produced internally, chemistry changes in days, not quarters.
-          </p>
+          <h2 class="story__title">{page?.secondStoryTitle}<span class="dot">.</span></h2>
+          <Fragment set:html={story2Html} />
           <div class="tags tags--tight" style="--tag: var(--ink)">
             <span class="tag">2 patented products</span>
             <span class="tag">Patent filing underway</span>
@@ -242,7 +238,7 @@ const filmSrc = page?.video?.file?.asset?.url || '/assets/videos/colortek-factor
             <span class="tag">Eco-conscious lines in active R&amp;D</span>
           </div>
           <p class="story__cta">
-            <a class="btn btn--outline" href="/products/">Explore our coatings <span class="arrow" aria-hidden="true">&#8594;</span></a>
+            <a class="btn btn--outline" href={page?.secondStoryCtaHref || '/products/'}>{page?.secondStoryCtaLabel || 'Explore our coatings'} <span class="arrow" aria-hidden="true">&#8594;</span></a>
           </p>
         </div>
       </div>

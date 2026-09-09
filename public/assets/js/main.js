@@ -599,4 +599,5 @@
     revealEls.forEach(function (el) { el.classList.add("in"); });
     stackPanels.forEach(function (el) { el.classList.add("in"); });
   }
+
 })();
