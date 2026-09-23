@@ -64,7 +64,7 @@ const jsonLd = {
     <!-- ============ APPLICATION SECTORS (tabs) ============ -->
     <section class="section section--flush" aria-label={`${page?.title} coating categories`}>
       <div class="container">
-        <p class="sectors__label" data-reveal>Application sectors</p>
+        <p class="sectors__label" data-reveal>Application sectors{sectors.length > 2 && <span class="sectors__count"> &middot; {sectors.length}</span>}</p>
         <div class="sectors" role="tablist" aria-label={`${page?.title} coating categories`} data-reveal>
           {sectors.map((sector, i) => (
             <button

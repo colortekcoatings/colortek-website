@@ -600,4 +600,29 @@
     stackPanels.forEach(function (el) { el.classList.add("in"); });
   }
 
+  /* ------------------------------------------------------------------
+     Sector strips: flag the ones that actually overflow so the phone
+     styles can show a scrollbar and edge fades only where they mean
+     something, and track which edge the user has reached.
+     ------------------------------------------------------------------ */
+  var strips = document.querySelectorAll(".sectors");
+  strips.forEach(function (strip) {
+    var mark = function () {
+      var overflows = strip.scrollWidth > strip.clientWidth + 4;
+      strip.classList.toggle("is-scrollable", overflows);
+      if (!overflows) {
+        strip.classList.remove("off-start", "at-end");
+        return;
+      }
+      strip.classList.toggle("off-start", strip.scrollLeft > 8);
+      strip.classList.toggle(
+        "at-end",
+        strip.scrollLeft > strip.scrollWidth - strip.clientWidth - 8
+      );
+    };
+    strip.addEventListener("scroll", mark, { passive: true });
+    window.addEventListener("resize", mark);
+    mark();
+  });
+
 })();

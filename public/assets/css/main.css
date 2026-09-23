@@ -1696,6 +1696,60 @@ html.js .rail.in .rail__step:nth-child(4) .rail__node { transition-delay: 900ms;
 
 .sectors::-webkit-scrollbar { display: none; }
 
+.sectors__count { display: none; }
+
+/* Phones: the strip really scrolls here, so it must SAY so. Chips go
+   compact (icon beside label) so three-and-a-half fit; the half-cut chip,
+   a slim visible scrollbar and an edge fade all signal "more this way".
+   The is-scrollable / off-start / at-end classes come from main.js and
+   only exist when the strip actually overflows — Metal's two tabs fit,
+   so it keeps a clean edge and no scrollbar. */
+@media (max-width: 640px) {
+  .sectors__count { display: inline; }
+
+  .sectors {
+    gap: var(--space-2);
+    padding-bottom: var(--space-3);
+  }
+
+  .sectors.is-scrollable {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(23, 25, 29, 0.35) rgba(23, 25, 29, 0.08);
+  }
+  .sectors.is-scrollable::-webkit-scrollbar { display: block; height: 4px; }
+  .sectors.is-scrollable::-webkit-scrollbar-track {
+    background: rgba(23, 25, 29, 0.08);
+    border-radius: 999px;
+  }
+  .sectors.is-scrollable::-webkit-scrollbar-thumb {
+    background: rgba(23, 25, 29, 0.35);
+    border-radius: 999px;
+  }
+
+  .sectors.is-scrollable {
+    -webkit-mask-image: linear-gradient(to right, #000 90%, transparent);
+            mask-image: linear-gradient(to right, #000 90%, transparent);
+  }
+  .sectors.is-scrollable.off-start {
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 90%, transparent);
+            mask-image: linear-gradient(to right, transparent, #000 8%, #000 90%, transparent);
+  }
+  .sectors.is-scrollable.at-end {
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 8%);
+            mask-image: linear-gradient(to right, transparent, #000 8%);
+  }
+
+  .sector {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    flex: 0 0 auto;
+    min-width: auto;
+    max-width: none;
+    padding: var(--space-3) var(--space-4);
+  }
+}
+
 .sector {
   /* Grow to share the row (7 tabs fill it; 2 sit as a natural pair),
      capped so a card never balloons. */
