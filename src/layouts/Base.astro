@@ -174,14 +174,16 @@ const isCurrent = (href) => path === href || (href !== '/' && path.startsWith(hr
     </div>
 
     <div class="footer__bottom">
-      <span>&copy; 2026 Colourtech Coating (India) Pvt. Ltd.</span>
+      <span>&copy; {new Date().getFullYear()} Colourtech Coating (India) Pvt. Ltd.</span>
       <span>ISO 9001:2015 certified</span>
       <span class="footer__credit">Designed and developed by <a href="https://gaa-tha.com/" target="_blank" rel="noopener">Gaatha</a></span>
     </div>
   </div>
 </footer>
 
-<CookieNotice measurementId={undefined} />
+{/* GA4 property "colortek.in" (Colortek Gmail). Loads only after the
+    visitor accepts the cookie notice — see CookieNotice.astro. */}
+<CookieNotice measurementId="G-D18MLCQ902" />
 
 <script src="/assets/js/main.js" defer></script>
 </body>

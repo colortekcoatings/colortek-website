@@ -1,0 +1,25 @@
+---
+/**
+ * Branded "page not found". Old WordPress demo addresses still in Google's
+ * index (tp-portfolios, author pages) land here until Google drops them, so
+ * this page routes people onward instead of stranding them on Netlify's
+ * plain default. Netlify serves dist/404.html with a real 404 status.
+ */
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Page not found | Colortek" description="This page could not be found." noindex>
+  <section class="page-hero" style="min-height: 70svh;">
+    <div class="page-hero__inner">
+      <h1 class="hero__title">Page not found<span class="dot">.</span></h1>
+      <p class="hero__sub">
+        This page has moved or no longer exists. Our coatings, gallery and
+        contact details are all a click away.
+      </p>
+      <div class="hero__actions">
+        <a class="btn btn--ink" href="/products/">Explore our coatings <span class="arrow" aria-hidden="true">&#8594;</span></a>
+        <a class="btn btn--outline" href="/">Back to home <span class="arrow" aria-hidden="true">&#8594;</span></a>
+      </div>
+    </div>
+  </section>
+</Base>

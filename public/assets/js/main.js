@@ -625,4 +625,28 @@
     mark();
   });
 
+  /* ------------------------------------------------------------------
+     Enquiry form: clear it once it has been sent. Pressing Back from the
+     thank-you page shows the browser's saved copy of the contact page,
+     form values included, which reads as "did it send?" — and invites a
+     duplicate. A flag set on submit tells the returning page to reset.
+     An unsent draft is left alone, so typing isn't lost if someone
+     wanders off mid-message.
+     ------------------------------------------------------------------ */
+  var enquiry = document.querySelector('form[name="enquiry"]');
+  if (enquiry) {
+    var SENT = "colortek-enquiry-sent";
+    enquiry.addEventListener("submit", function () {
+      try { sessionStorage.setItem(SENT, "1"); } catch (e) {}
+    });
+    window.addEventListener("pageshow", function () {
+      var sent = false;
+      try { sent = sessionStorage.getItem(SENT) === "1"; } catch (e) {}
+      if (sent) {
+        enquiry.reset();
+        try { sessionStorage.removeItem(SENT); } catch (e) {}
+      }
+    });
+  }
+
 })();

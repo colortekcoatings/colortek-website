@@ -52,7 +52,8 @@ export default defineConfig({
     react(),
     sitemap({
       // The studio is a private tool, not a page for Google to index.
-      filter: (page) => !page.includes('/admin'),
+      // Admin and the post-enquiry thank-you page are never search results.
+      filter: (page) => !page.includes('/admin') && !page.includes('/thanks'),
     }),
   ],
 });
