@@ -15,7 +15,7 @@ const settings = await sanityClient.fetch(`*[_id == "siteSettings"][0]{
 }`);
 ---
 
-<Base title={page?.seo?.title} description={page?.seo?.description}>
+<Base title={page?.seo?.title} description={page?.seo?.description} seo={page?.seo}>
 
   <!-- ============ PAGE HERO ============ -->
   <section class="page-hero">
@@ -58,7 +58,7 @@ const settings = await sanityClient.fetch(`*[_id == "siteSettings"][0]{
       <div class="contact-grid">
 
         <div class="contact-grid__form" data-reveal>
-          <h2 class="contact-h2">Send an enquiry<span class="dot">.</span></h2>
+          <h2 class="contact-h2">{page?.formHeading || 'Send an enquiry'}<span class="dot">.</span></h2>
 
           <!--
             Netlify Forms. Submissions are stored in the Netlify dashboard and
@@ -105,12 +105,11 @@ const settings = await sanityClient.fetch(`*[_id == "siteSettings"][0]{
               <label class="field__label" for="f-substrate">Substrate</label>
               <select class="field__input" id="f-substrate" name="substrate">
                 <option value="" selected>Choose one</option>
-                <option>Glass</option>
-                <option>Plastics</option>
-                <option>Metal</option>
-                <option>Ceramics</option>
-                <option>3D printing resin</option>
-                <option>Not sure yet</option>
+                {/* Choices come from Contact page → Substrate choices. The blank
+                    "Choose one" prompt stays fixed so the field always starts empty. */}
+                {(page?.substrateOptions || [])
+                  .filter((o) => o && o.trim().toLowerCase() !== 'choose one')
+                  .map((o) => <option>{o}</option>)}
               </select>
             </div>
 

@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import { toHTML } from '@portabletext/to-html';
 import { sanityClient } from 'sanity:client';
+import { getContact } from '../lib/contact.js';
 
 /**
  * The first page reading from Sanity.
@@ -42,11 +43,13 @@ const jsonLd = {
 
 // The very first question on the page opens by default; the rest are closed.
 let questionIndex = 0;
+const contact = await getContact();
 ---
 
 <Base
   title={page?.seo?.title || 'FAQ | Colortek Specialty Coatings'}
   description={page?.seo?.description || ''}
+  seo={page?.seo}
   jsonLd={jsonLd}
 >
 
@@ -89,8 +92,8 @@ let questionIndex = 0;
       <p class="cta-final__lead" data-reveal>Ask the R&amp;D team directly. A photo of your part is a good start.</p>
       <div class="cta-final__actions" data-reveal>
         <a class="btn btn--ink" href="/contact/">Talk to us <span class="arrow" aria-hidden="true">&#8594;</span></a>
-        <a class="cta-final__alt" href="https://wa.me/919819362380?text=Hi%20Colortek%2C%20I%20have%20a%20question." target="_blank" rel="noopener">WhatsApp us</a>
-        <a class="cta-final__alt" href="tel:+919819362380">Call +91 98193 62380</a>
+        <a class="cta-final__alt" href={contact.wa('Hi Colortek, I have a question.')} target="_blank" rel="noopener">WhatsApp us</a>
+        <a class="cta-final__alt" href={`tel:${contact.phoneLink}`}>Call {contact.phone}</a>
       </div>
     </div>
   </section>

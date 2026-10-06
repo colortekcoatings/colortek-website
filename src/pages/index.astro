@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import { sanityClient } from 'sanity:client';
 import { responsive, altOf } from '../lib/image.js';
+import { getContact } from '../lib/contact.js';
 
 const page = await sanityClient.fetch(`*[_id == "homePage"][0]{
   kicker, headingLine1, headingLine2, heroSub, seo,
@@ -10,6 +11,8 @@ const page = await sanityClient.fetch(`*[_id == "homePage"][0]{
   industries[]{ label, href, image }
 }`);
 
+const contact = await getContact();
+
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
@@ -17,8 +20,8 @@ const jsonLd = {
   "alternateName": "Colortek",
   "url": "https://colortek.in/",
   "foundingDate": "2000",
-  "email": "info@colortek.in",
-  "telephone": "+91-9819362380",
+  "email": contact.email,
+  "telephone": contact.phoneLink,
   "address": {
     "@type": "PostalAddress",
     "streetAddress": "B-37, MIDC Phase I, Kalyan Road, Golavali, Shilphata",
@@ -34,6 +37,7 @@ const jsonLd = {
 <Base
   title={page?.seo?.title}
   description={page?.seo?.description}
+  seo={page?.seo}
   jsonLd={jsonLd}
 >
 
@@ -194,14 +198,14 @@ const jsonLd = {
 
         <ul class="cband__channels" data-reveal style="--d: 90ms">
           <li>
-            <a href="tel:+919819362380">
+            <a href={`tel:${contact.phoneLink}`}>
               <span class="cband__label">Call</span>
-              <strong>+91 98193 62380</strong>
+              <strong>{contact.phone}</strong>
               <span class="arrow" aria-hidden="true">&#8594;</span>
             </a>
           </li>
           <li>
-            <a href="https://wa.me/919819362380?text=Hi%20Colortek%2C%20I%27d%20like%20to%20discuss%20a%20coating%20requirement."
+            <a href={contact.wa("Hi Colortek, I'd like to discuss a coating requirement.")}
                target="_blank" rel="noopener">
               <span class="cband__label">WhatsApp</span>
               <strong>Chat with us</strong>
@@ -209,9 +213,9 @@ const jsonLd = {
             </a>
           </li>
           <li>
-            <a href="mailto:info@colortek.in">
+            <a href={`mailto:${contact.email}`}>
               <span class="cband__label">Email</span>
-              <strong>info@colortek.in</strong>
+              <strong>{contact.email}</strong>
               <span class="arrow" aria-hidden="true">&#8594;</span>
             </a>
           </li>

@@ -14,9 +14,18 @@ const {
   title,
   description,
   ogImage,
-  noindex = false,
+  noindex: noindexProp = false,
   jsonLd,
+  seo,
 } = Astro.props;
+
+// The page's own "Search & social" tab in the panel: its share image wins over
+// the page's coded default, and its hide-from-Google switch adds to the coded one.
+// Both were offered in the panel but never read, so setting them did nothing.
+const noindex = noindexProp || Boolean(seo?.noindex);
+const seoImage = seo?.ogImage?.asset
+  ? urlFor(seo.ogImage).width(1200).height(630).fit('crop').auto('format').url()
+  : null;
 
 // The phone number, email and address appear on all 21 pages. They were written
 // into this file by hand, so editing them in Site settings changed the contact
@@ -37,7 +46,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const fallbackOg = settings?.defaultOgImage?.asset
   ? urlFor(settings.defaultOgImage).width(1200).height(630).fit('crop').auto('format').url()
   : '/assets/images/hero/isotrap-gold-bottles-dark.jpg';
-const ogImageAbsolute = new URL(ogImage || fallbackOg, Astro.site).href;
+const ogImageAbsolute = new URL(seoImage || ogImage || fallbackOg, Astro.site).href;
 
 // Marked server-side rather than in JavaScript: it works without JS, and the
 // old script matched on ".html" filenames which every directory URL now breaks.

@@ -8,7 +8,7 @@
  */
 import Base from '../../layouts/Base.astro';
 import { sanityClient } from 'sanity:client';
-import { responsive, altOf } from '../../lib/image.js';
+import { responsive, altOf, urlFor } from '../../lib/image.js';
 import { toHTML } from '@portabletext/to-html';
 import Icon from '../../components/Icon.astro';
 
@@ -70,7 +70,13 @@ const jsonLd = {
 };
 ---
 
-<Base title={post.seo?.title} description={post.seo?.description} jsonLd={jsonLd}>
+<Base
+  title={post.seo?.title}
+  description={post.seo?.description}
+  seo={post.seo}
+  ogImage={post.coverImage?.asset ? urlFor(post.coverImage).width(1200).height(630).fit('crop').auto('format').url() : undefined}
+  jsonLd={jsonLd}
+>
 
   <section class="page-hero page-hero--left article-hero">
     <div class="container">

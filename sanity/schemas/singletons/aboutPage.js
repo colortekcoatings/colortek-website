@@ -254,6 +254,14 @@ export default defineType({
             defineField({ name: 'title', title: 'Title', type: 'string' }),
             defineField({ name: 'body', title: 'Text', type: 'text', rows: 2 }),
             defineField({
+              name: 'points',
+              title: 'Bullet points',
+              type: 'array',
+              of: [{ type: 'string' }],
+              description: 'The short ticked lines under the text. Two read best.',
+              validation: (Rule) => Rule.max(3).warning('More than three makes the card tall.'),
+            }),
+            defineField({
               name: 'icon',
               title: 'Icon',
               type: 'string',

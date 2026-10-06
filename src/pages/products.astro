@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import { sanityClient } from 'sanity:client';
 import { responsive, altOf, urlFor } from '../lib/image.js';
+import { getContact } from '../lib/contact.js';
 
 const page = await sanityClient.fetch(`*[_id == "productsPage"][0]{
   heading, intro, seo, cta,
@@ -15,11 +16,13 @@ const page = await sanityClient.fetch(`*[_id == "productsPage"][0]{
 const ranges = await sanityClient.fetch(`*[_type == "rangePage"]|order(order asc, title asc){
   title, slug, shortDescription, thumbnail, heroImage
 }`);
+const contact = await getContact();
 ---
 
 <Base
-  title={"Products | Colortek Coating Ranges"}
-  description={"Colortek coating ranges for glass, plastics, metal, ceramics and 3D printing resins. ISOTRAP, AQUATRAP, UVAC, METACOAT, SILCOOK, SABLICOAT and RACHAK."}
+  title={page?.seo?.title || "Products | Colortek Coating Ranges"}
+  description={page?.seo?.description || "Colortek coating ranges for glass, plastics, metal, ceramics and 3D printing resins."}
+  seo={page?.seo}
   ogImage="/assets/images/hero/isotrap-gold-bottles-dark.jpg"
 >
 
@@ -65,8 +68,8 @@ const ranges = await sanityClient.fetch(`*[_type == "rangePage"]|order(order asc
   <section class="section" aria-label="What our chemistry can do">
     <div class="container">
       <div class="section-head section-head--sub" data-reveal>
-        <h2 class="section-head__title">One partner, every finish<span class="dot">.</span></h2>
-        <p class="section-head__lead">Cure, finish and performance are engineered together in the R&amp;D centre. You specify the result; we build the system behind it.</p>
+        <h2 class="section-head__title">{page?.capabilitiesHeading}<span class="dot">.</span></h2>
+        {page?.capabilitiesLead && <p class="section-head__lead">{page.capabilitiesLead}</p>}
       </div>
 
       <div class="cap-cards">
@@ -101,8 +104,8 @@ const ranges = await sanityClient.fetch(`*[_type == "rangePage"]|order(order asc
   <section class="section" aria-label="From brief to production">
     <div class="container">
       <div class="section-head section-head--sub" data-reveal>
-        <h2 class="section-head__title">From brief to production<span class="dot">.</span></h2>
-        <p class="section-head__lead">Four steps. The first one is an email.</p>
+        <h2 class="section-head__title">{page?.stepsHeading}<span class="dot">.</span></h2>
+        {page?.stepsLead && <p class="section-head__lead">{page.stepsLead}</p>}
       </div>
 
       <ol class="rail" data-reveal>
@@ -183,8 +186,8 @@ const ranges = await sanityClient.fetch(`*[_type == "rangePage"]|order(order asc
       <p class="cta-final__lead" data-reveal>{page?.cta?.lead}</p>
       <div class="cta-final__actions" data-reveal>
         <a class="btn btn--ink" href="/contact/">Talk to us <span class="arrow" aria-hidden="true">&#8594;</span></a>
-        <a class="cta-final__alt" href="https://wa.me/919819362380?text=Hi%20Colortek%2C%20I%27d%20like%20to%20discuss%20a%20coating%20requirement." target="_blank" rel="noopener">WhatsApp us</a>
-        <a class="cta-final__alt" href="tel:+919819362380">Call +91 98193 62380</a>
+        <a class="cta-final__alt" href={contact.wa("Hi Colortek, I'd like to discuss a coating requirement.")} target="_blank" rel="noopener">WhatsApp us</a>
+        <a class="cta-final__alt" href={`tel:${contact.phoneLink}`}>Call {contact.phone}</a>
       </div>
     </div>
   </section>
